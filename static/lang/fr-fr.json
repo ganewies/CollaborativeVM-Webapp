@@ -2,7 +2,7 @@
 	"languageName": "Français (FR)",
 	"translatedLanguageName": "French (FR)",
 	"flag": "🇫🇷",
-	"author": "pikterra",
+	"author": "Befaci",
 
 	"stringKeys": {
 		"kGeneric_CollabVM": "CollabVM",
@@ -31,7 +31,7 @@
 		"kSiteButtons_Rules": "Règles",
 		"kSiteButtons_DarkMode": "Mode sombre",
 		"kSiteButtons_LightMode": "Mode clair",
-		"kSiteButtons_Languages": "Languages",
+		"kSiteButtons_Languages": "Langages",
 
 		"kVM_UsersOnlineText": "Utilisateurs en ligne:",
 

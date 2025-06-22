@@ -1,0 +1,97 @@
+{
+	"languageName": "Smiley",
+	"translatedLanguageName": "Smiley",
+	"flag": ":P",
+	"author": "Befaci",
+
+	"stringKeys": {
+		"kGeneric_CollabVM": "CollabVM",
+		"kGeneric_Yes": "👍",
+		"kGeneric_No": "👎",
+		"kGeneric_Ok": "👌",
+		"kGeneric_Cancel": "⛔",
+		"kGeneric_Send": "🤙",
+		"kGeneric_Understood": "🤝",
+		"kGeneric_Username": "🪪",
+		"kGeneric_Password": "🔐",
+		"kGeneric_Login": "🔑👤",
+		"kGeneric_Register": "➕👤",
+		"kGeneric_EMail": "📧",
+		"kGeneric_DateOfBirth": "📅",
+		"kGeneric_VerificationCode": "🔑",
+		"kGeneric_Verify": "✅",
+		"kGeneric_Update": "🆕",
+		"kGeneric_Logout": "🛫",
+		
+		"kWelcomeModal_Header": "👋",
+
+		"kSiteButtons_Home": "🏠",
+		"kSiteButtons_FAQ": "❔",
+		"kSiteButtons_Rules": "📜",
+		"kSiteButtons_DarkMode": "🌙",
+		"kSiteButtons_LightMode": "☀️",
+		"kSiteButtons_Languages": "🏳️",
+
+		"kVM_UsersOnlineText": "📇:",
+
+		"kVM_TurnTimeTimer": "Vôtre tour se termine dans {0} secondes.",
+		"kVM_WaitingTurnTimer": "Vôtre tour sera dans {0} secondes.",
+		"kVM_VoteCooldownTimer": "Veuillez attendre {0} secondes avant de commencer un autre vote.",
+
+		"kVM_VoteForResetTitle": "Voulez vous réinitialiser le VM ?",
+		"kVM_VoteForResetTimer": "Le vote se termine dans {0} secondes",
+
+		"kVMButtons_TakeTurn": "Commencer vôtre tour",
+		"kVMButtons_EndTurn": "Terminer vôtre tour",
+		"kVMButtons_ChangeUsername": "Changer de nom d'utilisateur",
+		"kVMButtons_Keyboard": "Clavier",
+		"KVMButtons_CtrlAltDel": "Ctrl+Alt+Del",
+
+		"kVMButtons_VoteForReset": "Commencer un vote pour reset",
+		"kVMButtons_Screenshot": "Capture d'écran",
+
+		"kQEMUMonitor": "Moniteur QEMU",
+		"kAdminVMButtons_PassVote": "Passer le vote",
+		"kAdminVMButtons_CancelVote": "Annuler le vote",
+
+		"kAdminVMButtons_Restore": "Rétablir",
+		"kAdminVMButtons_Reboot": "Redémarrer",
+		"kAdminVMButtons_ClearTurnQueue": "Supprimer la queue pour un tour",
+		"kAdminVMButtons_BypassTurn": "Bypasser vôtre tour",
+		"kAdminVMButtons_IndefiniteTurn": "Tour indéfinis",
+
+		"kAdminVMButtons_Ban": "🔨",
+		"kAdminVMButtons_Kick": "⛓️‍💥👤",
+		"kAdminVMButtons_TempMute": "🚫🎤⏰",
+		"kAdminVMButtons_IndefMute": "🚫🎤",
+		"kAdminVMButtons_Unmute": "✔️🎤",
+		"kAdminVMButtons_GetIP": "🔎💻",
+
+		"kVMPrompts_AdminChangeUsernamePrompt": "🆕🪪👉 {0}",
+		"kVMPrompts_AdminRestoreVMPrompt": "Êtes-vous sûr de rétablir le VM?",
+		"kVMPrompts_EnterNewUsernamePrompt": "Entrer un nouveau nom d'utilisateur, ou laisser l'espace vide pour etre assigner un nom d'utilisateur invité",
+
+		"kError_UnexpectedDisconnection": "Vous avez été déconnecté du serveur.",
+		"kError_UsernameTaken": "Ce nom d'utilisateur est déjà pris",
+		"kError_UsernameInvalid": "Les noms d'utilisateurs ne peuvent que contenirs des chiffres, lettres, éspaces, tirets, tirets du bas, et des points, et ils doivent êtres d'une longueur entre 3 et 20.",
+		"kError_UsernameBlacklisted": "Ce nom d'utilisateur est interdit.",
+		"kError_IncorrectPassword": "Mot de passe incorrect.",
+
+		"kAccountModal_Verify": "✅📧",
+		"kAccountModal_AccountSettings": "Paramètres de compte",
+		"kAccountModal_ResetPassword": "Réinitialiser le Mot de passe",
+
+		"kAccountModal_NewPassword": "Nouveau Mot de passe",
+		"kAccountModal_ConfirmNewPassword": "Confirmer le nouveau Mot de passe",
+		"kAccountModal_CurrentPassword": "Mot de passe actuel",
+		"kAccountModal_ConfirmPassword": "Confirmer le nouveau Mot de passe",
+
+		"kMissingCaptcha": "Veuillez compléter ce Captcha.",
+		"kPasswordsMustMatch": "Les Mot de passes doivent se corréspondre.",
+		"kAccountModal_VerifyText": "Nous avons envoyez un E-mail à {0}. Pour vérifier votre compte, veuillez entrer le mot de passe à 8 chiffre envoyé par E-mail.",
+		"kAccountModal_VerifyPasswordResetText": "Nous avons envoyez un E-mail à {0}. Pour réinitialiser votre Mot de passe, veuillez entrer le mot de passe à 8 chiffre envoyé par E-mail.",
+		"kAccountModal_PasswordResetSuccess": "Vôtre Mot de passe à été réinitialiser avec succès. Vous pouvez maintenant vous connecter avec votre nouveau Mot de passe.",
+
+		"kNotLoggedIn": "❌👤"
+	}
+}
