@@ -1,22 +1,18 @@
 {
-    "SiteNameOverride": null,
+    "SiteName": "CollaborativeVM",
     "WelcomeModalTitleOverride": null,
     "WelcomeModalBodyOverride": null,
-    "WelcomeModalLocalStorageKey": "no-welcome-modal",
+    "WelcomeModalLocalStorageKeyName": "dont-show-rules-modal",
     "ChatSound": "//computernewb.com/collab-vm/notify.ogg",
     "ServerAddresses": [
-        "wss://computernewb.com/collab-vm/vm0",
-        "wss://computernewb.com/collab-vm/vm1",
-        "wss://computernewb.com/collab-vm/vm2",
-        "wss://computernewb.com/collab-vm/vm3",
-        "wss://computernewb.com/collab-vm/vm4",
-        "wss://computernewb.com/collab-vm/vm5",
-        "wss://computernewb.com/collab-vm/vm6",
-        "wss://computernewb.com/collab-vm/vm7",
-        "wss://computernewb.com/collab-vm/vm8"
+        "wss://vms.befacivm.us.to/666",
+        "wss://vms.befacivm.us.to/1",
+        "wss://vms.befacivm.us.to/2",
+        "wss://vms.befacivm.us.to/3",
+        "wss://vms.befacivm.us.to/4"
     ],
     "ServerAddressesListURI": null,
-    "NSFWVMs": ["vm0b0t"],
+    "NSFWVMs": ["befvm00"],
     "RawMessages": {
         "VMTitles": true,
         "Messages": true

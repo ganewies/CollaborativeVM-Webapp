@@ -25,7 +25,7 @@
 }
 #vmlist div.col-md-3 > div.card:hover {
   cursor: pointer;
-  border-color: rgb(8, 121, 250);
+  border-color: rgb(158, 218, 9);
 }
 
 .vmtile > img {
@@ -34,7 +34,7 @@
 
 .chat-table, .username-table {
   overflow-y: auto;
-  border: 1px solid #575757;
+  border: 1px solid #51544f;
 }
 .chat-table {
   height: 30vh;
@@ -56,15 +56,15 @@
 }
 
 .focused {
-  box-shadow: 0 0 9px 0 rgba(45,213,255,.75);
-  -moz-box-shadow: 0 0 9px 0 rgba(45,213,255,.75);
-  -webkit-box-shadow: 0 0 9px 0 rgba(45,213,255,.75)
+  box-shadow: 0 0 9px 0 rgba(30, 255, 229, 0.7);
+  -moz-box-shadow: 0 0 9px 0 rgba(30, 255, 229, 0.7);
+  -webkit-box-shadow: 0 0 9px 0 rgba(30, 255, 229, 0.7)
 }
 
 .waiting {
-  box-shadow: 0 0 9px 0 rgba(242,255,63,.75);
-  -moz-box-shadow: 0 0 9px 0 rgba(242,255,63,.75);
-  -webkit-box-shadow: 0 0 9px 0 rgba(242,255,63,.75)
+  box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47);
+  -moz-box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47);
+  -webkit-box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47)
 }
 
 #staffbtns {
@@ -88,16 +88,16 @@
 }
 
 tr.user-admin .userlist-username, .chat-username-admin, .username-admin {
-  color: #FF0000 !important;
+  color: #ff2222 !important;
 }
 
 tr.user-moderator .userlist-username, .chat-username-moderator, .username-moderator {
-  color: #00FF00 !important;
+  color: #22ff22 !important;
 }
 
 html[data-bs-theme="dark"] {
   tr.user-unregistered .userlist-username, .chat-username-unregistered, .username-unregistered {
-    color: #b1b1b1 !important;
+    color: #bdbdbded !important;
   }
   
   tr.user-registered .userlist-username, .chat-username-registered, .username-registered {
@@ -133,8 +133,8 @@ tr.user-turn > td {
 }
 
 tr.user-turn:hover, tr.user-turn > td:hover {
-  background-color: #bacbe6 !important;
-  --bs-table-bg-state: #bacbe6 !important;
+  background-color: #c1feff !important;
+  --bs-table-bg-state: #c1feff !important;
 }
 
 tr.user-waiting > td {
@@ -145,8 +145,8 @@ tr.user-waiting > td {
 }
 
 .tr.user-waiting:hover, tr.user-waiting > td:hover {
-  background-color: #ece1be !important;
-  --bs-table-bg-state: #ece1be !important;
+  background-color: #ead7abf2 !important;
+  --bs-table-bg-state: #ead7abf2 !important;
 }
 
 .user-current .userlist-username {
@@ -174,7 +174,7 @@ tr.user-waiting > td {
 }
 
 .osk-main.simple-keyboard .hg-row:first-child {
-  margin-bottom: 8.51px; /* wtf? */
+  margin-bottom: 8.51px;
 }
 
 .osk-arrows.simple-keyboard {
@@ -305,7 +305,7 @@ Theme: cvmDark
 }
 
 /*
-Theme: cvmDisabled
+Theme: cvmDisabled (its a theme? bruh ok - ganewies team)
 */
 .simple-keyboard.cvmDisabled .hg-button {
   border-bottom: none;
@@ -323,11 +323,11 @@ Theme: cvmDisabled
 /* NSFW Blur */
 .cvm-nsfw {
   img {
-    filter:blur(40px)!important; 
+    filter:blur(30px)!important; 
   }
   h5::before {
     content: "[NSFW] ";
-    color: #ff0000;
+    color: #ff3636f5;
   }
 }
 
@@ -343,6 +343,7 @@ Theme: cvmDisabled
 
 .userlist-flag {
   padding-right: 0.5rem;
+  font-family: 'Noto Color Emoji', 'system-ui', sans-serif !important;
   user-select: none;
 }
 
