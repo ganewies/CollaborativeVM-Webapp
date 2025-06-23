@@ -19,7 +19,8 @@ const _eval = window.eval;
 
 // Elements
 const w = window as any;
-const elements = {
+
+let elements = {
 	vmlist: document.getElementById('vmlist') as HTMLDivElement,
 	vmview: document.getElementById('vmview') as HTMLDivElement,
 	vmDisplay: document.getElementById('vmDisplay') as HTMLDivElement,
@@ -457,7 +458,7 @@ async function openVM(vm: VM): Promise<void> {
 		throw new Error('Failed to connect to node');
 	}
 	// Set the title
-	document.title = Format('{0} - {1}', vm.id, TheI18n.GetString(I18nStringKey.kGeneric_CollabVM));
+	document.title = Format('{0} - {1}', vm.id, Config.SiteName);
 	// Append canvas
 	elements.vmDisplay.appendChild(VM!.canvas);
 	// Switch to the VM view
@@ -472,7 +473,7 @@ function closeVM() {
 	// Close the VM
 	VM.close();
 	VM = null;
-	document.title = TheI18n.GetString(I18nStringKey.kGeneric_CollabVM);
+	document.title = Config.SiteName;
 	turn = -1;
 	// Remove the canvas
 	elements.vmDisplay.innerHTML = '';
@@ -1419,31 +1420,36 @@ elements.accountResetPasswordForm.addEventListener('submit', async e => {
 	}
 	return false;
 });
-elements.accountResetPasswordVerifyForm.addEventListener('submit', async e => {
-	e.preventDefault();
-	var code = elements.accountResetPasswordCode.value;
-	var password = elements.accountResetPasswordNewPassword.value;
-	if (password !== elements.accountResetPasswordConfirmNewPassword.value) {
-		elements.accountModalErrorText.innerHTML = TheI18n.GetString(I18nStringKey.kPasswordsMustMatch);
-		elements.accountModalError.style.display = "block";
+// guh, the fcking timeout and then reinitialize is required else its error
+setTimeout(() => {
+	elements.accountResetPasswordVerifyForm = document.getElementById("accountResetPasswordVerifyForm") as HTMLFormElement;
+	elements.accountResetPasswordVerifyForm.addEventListener('submit', async e => {
+		e.preventDefault();
+		var code = elements.accountResetPasswordCode.value;
+		var password = elements.accountResetPasswordNewPassword.value;
+		if (password !== elements.accountResetPasswordConfirmNewPassword.value) {
+			elements.accountModalErrorText.innerHTML = TheI18n.GetString(I18nStringKey.kPasswordsMustMatch);
+			elements.accountModalError.style.display = "block";
+			return false;
+		}
+		var result = await auth!.resetPassword(resetPasswordUsername!, resetPasswordEmail!, code, password);
+		if (result.success) {
+			elements.accountResetPasswordCode.value = "";
+			elements.accountResetPasswordNewPassword.value = "";
+			elements.accountResetPasswordConfirmNewPassword.value = "";
+			elements.accountModalSuccessText.innerHTML = TheI18n.GetString(I18nStringKey.kAccountModal_PasswordResetSuccess);
+			elements.accountModalSuccess.style.display = "block";
+			elements.accountResetPasswordVerifySection.style.display = "none";
+			elements.accountLoginSection.style.display = "block";
+			
+		} else {
+			elements.accountModalErrorText.innerHTML = result.error!;
+			elements.accountModalError.style.display = "block";
+		}
 		return false;
-	}
-	var result = await auth!.resetPassword(resetPasswordUsername!, resetPasswordEmail!, code, password);
-	if (result.success) {
-		elements.accountResetPasswordCode.value = "";
-		elements.accountResetPasswordNewPassword.value = "";
-		elements.accountResetPasswordConfirmNewPassword.value = "";
-		elements.accountModalSuccessText.innerHTML = TheI18n.GetString(I18nStringKey.kAccountModal_PasswordResetSuccess);
-		elements.accountModalSuccess.style.display = "block";
-		elements.accountResetPasswordVerifySection.style.display = "none";
-		elements.accountLoginSection.style.display = "block";
-		
-	} else {
-		elements.accountModalErrorText.innerHTML = result.error!;
-		elements.accountModalError.style.display = "block";
-	}
-	return false;
-});
+	});
+}, 1000);
+
 
 let darkTheme = true;
 function loadColorTheme(dark : boolean) {
@@ -1520,7 +1526,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	TheI18n.on('languageChanged', lang => {
 		// Update all dynamic text
 		if (VM) {
-			document.title = Format('{0} - {1}', VM.getNode()!, TheI18n.GetString(I18nStringKey.kGeneric_CollabVM));
+			document.title = Format('{0} - {1}', VM.getNode()!, Config.SiteName);
 			if (turn !== -1) {
 				if (turn === 0) elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_TurnTimeTimer, turnTimer);
 				else elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_WaitingTurnTimer, turnTimer);
@@ -1533,7 +1539,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		}
 		else {
-			document.title = TheI18n.GetString(I18nStringKey.kGeneric_CollabVM);
+			document.title = Config.SiteName;
 		}
 		if (!auth || !auth.account) elements.accountDropdownUsername.innerText = TheI18n.GetString(I18nStringKey.kNotLoggedIn);
 		if (darkTheme) elements.toggleThemeBtnText.innerHTML = TheI18n.GetString(I18nStringKey.kSiteButtons_LightMode);
@@ -1570,18 +1576,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 	if (hideFlag === null) hideFlag = false;
 	elements.hideFlagCheckbox.checked = hideFlag;
 
-	document.title = TheI18n.GetString(I18nStringKey.kGeneric_CollabVM);
+	document.title = Config.SiteName;
 
 	// Load all VMs
 	loadList();
 
 	// Welcome modal
 	let welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal') as HTMLDivElement);
-	let noWelcomeModal = window.localStorage.getItem(Config.WelcomeModalLocalStorageKey);
+	let noWelcomeModal = window.localStorage.getItem(Config.WelcomeModalLocalStorageKeyName);
 	if (noWelcomeModal !== '1') {
 		let welcomeModalDismissBtn = document.getElementById('welcomeModalDismiss') as HTMLButtonElement;
 		welcomeModalDismissBtn.addEventListener('click', () => {
-			window.localStorage.setItem(Config.WelcomeModalLocalStorageKey, '1');
+			window.localStorage.setItem(Config.WelcomeModalLocalStorageKeyName, '1');
 		});
 		welcomeModalDismissBtn.disabled = true;
 		welcomeModal.show();
