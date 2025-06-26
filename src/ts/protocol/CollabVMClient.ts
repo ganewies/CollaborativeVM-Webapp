@@ -217,7 +217,7 @@ export default class CollabVMClient {
 		}
 		if (msg.type === undefined) return;
 		switch (msg.type) {
-			case CollabVMProtocolMessageType.rect: {
+			case CollabVMProtocolMessageType.frame: {
 				if (!msg.rect || msg.rect.x === undefined || msg.rect.y === undefined || msg.rect.data === undefined) return;
 				let blob = new Blob( [ new Uint8Array(msg.rect.data) ], {type: "image/jpeg"});
 				let url = URL.createObjectURL(blob);
