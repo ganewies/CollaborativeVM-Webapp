@@ -2,6 +2,7 @@ import { createNanoEvents, Emitter, DefaultEvents, Unsubscribe } from 'nanoevent
 import * as Guacutils from './Guacutils.js';
 import VM from './VM.js';
 import { User } from './User.js';
+import { OpusPlayer } from './OpusPlayer.js';
 import { AdminOpcode, Permissions, Rank } from './Permissions.js';
 import TurnStatus from './TurnStatus.js';
 import Mouse from './mouse.js';
@@ -76,6 +77,9 @@ export default class CollabVMClient {
 	private voteStatus: VoteStatus | null = null;
 	private node: string | null = null;
 	private auth: boolean = false;
+	// audio
+	private audioMute: boolean = true; // decides whether audio will play or not
+	private opusPlayer: OpusPlayer | undefined;
 	// events that are used internally and not exposed
 	private internalEmitter: Emitter<CollabVMClientPrivateEvents>;
 	// public events
@@ -205,6 +209,7 @@ export default class CollabVMClient {
 	private onBinaryMessage(data: ArrayBuffer) {
 		let msg: CollabVMProtocolMessage;
 		try {
+			//@ts-ignore
 			msg = msgpack.decode(data);
 		} catch {
 			console.error("Server sent invalid binary message");
@@ -224,6 +229,17 @@ export default class CollabVMClient {
 				img.src = url;
 				break;
 			}
+			case CollabVMProtocolMessageType.audioOpus:
+				if (msg.opusPacket) {
+					const packet = new Uint8Array(msg.opusPacket);
+					if (!this.opusPlayer) { // create the opus player if it doesn't already exist
+						this.opusPlayer = new OpusPlayer();
+					}
+					this.opusPlayer.feed(packet);
+				} else {
+					console.error('[Client] Missing opusPacket in audioOpus message');
+				}
+				break;
 		}
 	}
 
@@ -589,6 +605,16 @@ export default class CollabVMClient {
 		this.send('turn', taketurn ? '1' : '0');
 	}
 
+	// Mute or unmute audio
+	sendAudioMute() {
+		this.send('audioMute');
+		this.audioMute = !this.audioMute;
+	}
+	// Return mute status
+	getAudioMute() {
+		return this.audioMute;
+	}
+
 	// Send mouse instruction
 	sendmouse(_x: number, _y: number, mask: number) {
 		let x = Math.round((_x / this.canvas.width) * this.actualScreenSize.width);
@@ -713,6 +739,11 @@ export default class CollabVMClient {
 	// Hide screen
 	hideScreen(hidden: boolean) {
 		this.send('admin', AdminOpcode.HideScreen, hidden ? '1' : '0');
+	}
+
+	// Hide screen
+	clearChat() {
+		this.send('admin', AdminOpcode.ClearChat);
 	}
 
 	// Login to account

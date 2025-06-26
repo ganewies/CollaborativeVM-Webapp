@@ -38,6 +38,8 @@ let elements = {
 	turnBtnText: document.getElementById('turnBtnText') as HTMLSpanElement,
 	turnstatus: document.getElementById('turnstatus') as HTMLParagraphElement,
 	osk: window.document.getElementById('oskBtn') as HTMLButtonElement,
+	audioBtn: window.document.getElementById('audioBtn') as HTMLButtonElement,
+	audioBtnText: window.document.getElementById('audioBtnText') as HTMLSpanElement,
 	oskContainer: document.getElementById('osk-container') as HTMLDivElement,
 	screenshotButton: document.getElementById('screenshotButton') as HTMLButtonElement,
 	voteResetButton: document.getElementById('voteResetButton') as HTMLButtonElement,
@@ -486,9 +488,12 @@ function closeVM() {
 	rank = Rank.Unregistered;
 	perms.set(0);
 	w.VMName = null;
+	// Reset audio state
+	if (VM!.getAudioMute() === false) VM!.sendAudioMute();
 	// Reset admin and vote panels
 	elements.staffbtns.style.display = 'none';
 	elements.restoreBtn.style.display = 'none';
+	elements.audioBtn.innerHTML = `:mute_emoji: ${I18nStringKey.KVMButtons_AudioMuteLabel_On}`;
 	elements.rebootBtn.style.display = 'none';
 	elements.bypassTurnBtn.style.display = 'none';
 	elements.endTurnBtn.style.display = 'none';
@@ -572,8 +577,13 @@ function chatMessage(username: string, message: string) {
 		let msgclass;
 		switch (rank) {
 			case Rank.Unregistered:
-				userclass = 'chat-username-unregistered';
-				msgclass = 'chat-unregistered';
+				if (Config.Auth.Enabled) {
+					userclass = 'chat-username-unregistered';
+					msgclass = 'chat-unregistered';
+				} else {
+					userclass = 'chat-username-registered';
+					msgclass = 'chat-registered';
+				}
 				break;
 			case Rank.Registered:
 				userclass = 'chat-username-registered';
@@ -631,10 +641,13 @@ function addUser(user: User) {
 			tr.classList.add('user-registered');
 			break;
 		case Rank.Unregistered:
-			tr.classList.add('user-unregistered');
+			if (Config.Auth.Enabled) tr.classList.add('user-unregistered');
+			else tr.classList.add('user-registered');
 			break;
 	}
-	if (user.username === w.username) tr.classList.add('user-current');
+	if (user.username === w.username) {
+		tr.classList.add('user-current');
+	}
 	tr.appendChild(td);
 	let u = { user: user, element: tr, usernameElement: usernameSpan, flagElement: flagSpan };
 	if (rank === Rank.Admin || rank === Rank.Moderator) userModOptions(u);
@@ -1420,35 +1433,38 @@ elements.accountResetPasswordForm.addEventListener('submit', async e => {
 	}
 	return false;
 });
-// guh, the fcking timeout and then reinitialize is required else its error
+
 setTimeout(() => {
 	elements.accountResetPasswordVerifyForm = document.getElementById("accountResetPasswordVerifyForm") as HTMLFormElement;
-	elements.accountResetPasswordVerifyForm.addEventListener('submit', async e => {
-		e.preventDefault();
-		var code = elements.accountResetPasswordCode.value;
-		var password = elements.accountResetPasswordNewPassword.value;
-		if (password !== elements.accountResetPasswordConfirmNewPassword.value) {
-			elements.accountModalErrorText.innerHTML = TheI18n.GetString(I18nStringKey.kPasswordsMustMatch);
-			elements.accountModalError.style.display = "block";
+	// verify if the form is freaking here (idk why it doesnt works on the fork)
+	if (elements.accountResetPasswordVerifyForm) {
+		elements.accountResetPasswordVerifyForm.addEventListener('submit', async e => {
+			e.preventDefault();
+			var code = elements.accountResetPasswordCode.value;
+			var password = elements.accountResetPasswordNewPassword.value;
+			if (password !== elements.accountResetPasswordConfirmNewPassword.value) {
+				elements.accountModalErrorText.innerHTML = TheI18n.GetString(I18nStringKey.kPasswordsMustMatch);
+				elements.accountModalError.style.display = "block";
+				return false;
+			}
+			var result = await auth!.resetPassword(resetPasswordUsername!, resetPasswordEmail!, code, password);
+			if (result.success) {
+				elements.accountResetPasswordCode.value = "";
+				elements.accountResetPasswordNewPassword.value = "";
+				elements.accountResetPasswordConfirmNewPassword.value = "";
+				elements.accountModalSuccessText.innerHTML = TheI18n.GetString(I18nStringKey.kAccountModal_PasswordResetSuccess);
+				elements.accountModalSuccess.style.display = "block";
+				elements.accountResetPasswordVerifySection.style.display = "none";
+				elements.accountLoginSection.style.display = "block";
+				
+			} else {
+				elements.accountModalErrorText.innerHTML = result.error!;
+				elements.accountModalError.style.display = "block";
+			}
 			return false;
-		}
-		var result = await auth!.resetPassword(resetPasswordUsername!, resetPasswordEmail!, code, password);
-		if (result.success) {
-			elements.accountResetPasswordCode.value = "";
-			elements.accountResetPasswordNewPassword.value = "";
-			elements.accountResetPasswordConfirmNewPassword.value = "";
-			elements.accountModalSuccessText.innerHTML = TheI18n.GetString(I18nStringKey.kAccountModal_PasswordResetSuccess);
-			elements.accountModalSuccess.style.display = "block";
-			elements.accountResetPasswordVerifySection.style.display = "none";
-			elements.accountLoginSection.style.display = "block";
-			
-		} else {
-			elements.accountModalErrorText.innerHTML = result.error!;
-			elements.accountModalError.style.display = "block";
-		}
-		return false;
-	});
-}, 1000);
+		});
+	}
+}, 500);
 
 
 let darkTheme = true;

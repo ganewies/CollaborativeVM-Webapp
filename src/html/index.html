@@ -253,7 +253,7 @@
             <div id="btns">
                 <button class="btn btn-secondary" id="takeTurnBtn"><i class="fa-solid fa-computer-mouse"></i> <span id="turnBtnText"></span></button>
                 <button class="btn btn-secondary" id="oskBtn"><i class="fa-solid fa-keyboard"></i> <span id="oskBtnText"></span></button>
-                <button class="btn btn-secondary" id="changeUsernameBtn"><i class="fa-solid fa-signature"></i> <span id="changeUsernameBtnText"></span></button>
+                <button class="btn btn-secondary" id="audioBtn"><i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span></button>
                 <button class="btn btn-secondary" id="voteResetButton"><i class="fa-solid fa-rotate-left"></i> <span id="voteForResetBtnText"></span></button>
                 <button class="btn btn-secondary" id="screenshotButton"><i class="fa-solid fa-camera"></i> <span id="screenshotBtnText"></span></button>
                 <button class="btn btn-secondary" id="ctrlAltDelBtn"><i class="fa-solid fa-gear"></i> <span id="ctrlAltDelBtnText"></span></button>
@@ -286,7 +286,10 @@
                     <div class="table-responsive username-table">
                         <table class="table table-hover table-borderless">
                             <thead>
-                                <th class="bg-body-tertiary"><i class="fa-solid fa-user"></i> <span id="usersOnlineText"></span> (<span id="onlineusercount"></span>)</th>
+                                <th class="bg-body-tertiary">
+                                    <i class="fa-solid fa-user"></i> <span id="usersOnlineText"></span> (<span id="onlineusercount"></span>)
+                                </th>
+                                <th></th>
                             </thead>
                             <tbody id="userlist"></tbody>
                         </table>
@@ -302,6 +305,7 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text username-unregistered" id="username"></span>
+                        <button id="changeUsernameBtn" aria-label="Change the username"><i class="fa-solid fa-signature"></i></button>
                         <input type="text" class="form-control" id="chat-input"/>
                         <div class="input-group-text" id="xssCheckboxContainer">
                             <input class="form-check-input" type="checkbox" value="" id="xssCheckbox"/>
@@ -315,3 +319,5 @@
         <script type="module" src="../ts/main.ts" type="application/javascript"></script>
     </body>
 </html>
+<!-- some shits that i couldnt find on the code ... -->
+<span id="changeUsernameBtnText"style="display:none;"></span>

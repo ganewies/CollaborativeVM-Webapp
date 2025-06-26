@@ -48,6 +48,8 @@ export enum I18nStringKey {
 	kVMButtons_ChangeUsername = 'kVMButtons_ChangeUsername',
 	kVMButtons_Keyboard = 'kVMButtons_Keyboard',
 	KVMButtons_CtrlAltDel = 'KVMButtons_CtrlAltDel',
+	KVMButtons_AudioMuteLabel_On = 'KVMButtons_AudioMuteLabel_On',
+	KVMButtons_AudioMuteLabel_Off = 'KVMButtons_AudioMuteLabel_Off',
 
 	kVMButtons_VoteForReset = 'kVMButtons_VoteForReset',
 	kVMButtons_Screenshot = 'kVMButtons_Screenshot',
@@ -440,7 +442,7 @@ export class I18n {
 
 	// Returns a (raw, unformatted) string. Currently only used if we don't need formatting.
 	GetStringRaw(key: I18nStringKey): string {
-		if (key === I18nStringKey.kGeneric_CollabVM && Config.SiteNameOverride) return Config.SiteNameOverride;
+		if (key === I18nStringKey.kGeneric_CollabVM && Config.OverrideSiteNameTitle) return Config.SiteName;
 		if (key === I18nStringKey.kWelcomeModal_Header && Config.WelcomeModalTitleOverride) return Config.WelcomeModalTitleOverride;
 		if (key === I18nStringKey.kWelcomeModal_Body && Config.WelcomeModalBodyOverride) return Config.WelcomeModalBodyOverride;
 		let val = this.lang.stringKeys[key];
@@ -451,7 +453,7 @@ export class I18n {
 		if (val == undefined) {
 			let fallback = fallbackLanguage.stringKeys[key];
 			if (fallback !== undefined) val = fallback;
-			else return `${key} (ERROR LOOKING UP TRANSLATION!!!)`;
+			else return `${key} (ERR LOOKING TRANSLATION)`;
 		}
 
 		return val;

@@ -48,6 +48,8 @@ const fallbackLanguage : Language = {
 		"kVMButtons_ChangeUsername": "Change Username",
 		"kVMButtons_Keyboard": "Keyboard",
 		"KVMButtons_CtrlAltDel": "Ctrl+Alt+Del",
+		"KVMButtons_AudioMuteLabel_On": 'Unmute Audio',
+		"KVMButtons_AudioMuteLabel_Off": 'Mute Audio',
 
 		"kVMButtons_VoteForReset": "Vote For Reset",
 		"kVMButtons_Screenshot": "Screenshot",

@@ -47,6 +47,8 @@
 		"kVMButtons_ChangeUsername": "Changer de nom d'utilisateur",
 		"kVMButtons_Keyboard": "Clavier",
 		"KVMButtons_CtrlAltDel": "Ctrl+Alt+Del",
+		"kVMButtons_AudioMute_On": "Démute le son",
+		"kVMButtons_AudioMute_Off": "Mute le son",
 
 		"kVMButtons_VoteForReset": "Commencer un vote pour reset",
 		"kVMButtons_Screenshot": "Capture d'écran",
@@ -65,7 +67,7 @@
 		"kAdminVMButtons_Kick": "Exclusion",
 		"kAdminVMButtons_TempMute": "Mute temporaire",
 		"kAdminVMButtons_IndefMute": "Mute indéfinis",
-		"kAdminVMButtons_Unmute": "Unmute",
+		"kAdminVMButtons_Unmute": "Démute",
 		"kAdminVMButtons_GetIP": "Trouver l'IP",
 
 		"kVMPrompts_AdminChangeUsernamePrompt": "Entrer un nouveau nom d'utilisateur pour {0}:",

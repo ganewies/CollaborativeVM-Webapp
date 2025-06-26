@@ -1,5 +1,6 @@
 {
     "SiteName": "CollaborativeVM",
+    "OverrideSiteNameTitle": false,
     "WelcomeModalTitleOverride": null,
     "WelcomeModalBodyOverride": null,
     "WelcomeModalLocalStorageKeyName": "dont-show-rules-modal",

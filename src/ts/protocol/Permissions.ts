@@ -53,5 +53,6 @@ export enum AdminOpcode {
 	ChatXSS = 21,
 	ToggleTurns = 22,
 	IndefiniteTurn = 23,
-	HideScreen = 24
+	HideScreen = 24,
+	ClearChat = 26
 }
