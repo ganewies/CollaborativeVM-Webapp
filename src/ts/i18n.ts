@@ -278,7 +278,7 @@ export class I18n {
 			voteYesBtnText: I18nStringKey.kGeneric_Yes,
 			voteNoBtnText: I18nStringKey.kGeneric_No,
 
-			changeUsernameBtnText: I18nStringKey.kVMButtons_ChangeUsername,
+			audioBtnText: I18nStringKey.KVMButtons_AudioMuteLabel_On,
 			oskBtnText: I18nStringKey.kVMButtons_Keyboard,
 			ctrlAltDelBtnText: I18nStringKey.KVMButtons_CtrlAltDel,
 			voteForResetBtnText: I18nStringKey.kVMButtons_VoteForReset,

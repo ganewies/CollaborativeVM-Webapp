@@ -35,17 +35,27 @@
 .chat-table, .username-table {
   overflow-y: auto;
   border: 1px solid #51544f;
+  border-bottom: 0 solid #ffffff00;
+  border-radius: 9px;
 }
 .chat-table {
   height: 30vh;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .username-table {
   max-height: 30vh;
+  border: 1.25px solid #51544f;
 }
 .username-table > table > thead {
   position: sticky;
   top: 0;
+}
+
+.input-group-text, #sendChatBtn {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
 #turnstatus {
@@ -69,6 +79,7 @@
 
 #staffbtns {
   display: none;
+  margin-top: 2.3px;
 }
 
 #staffbtns > button {
@@ -117,7 +128,7 @@ html[data-bs-theme="dark"] {
 
 html[data-bs-theme="light"] {
   tr.user-unregistered .userlist-username, .chat-username-unregistered, .username-unregistered {
-    color: #6b6b6b !important;
+    color: #6b6b6bed !important;
   }
   
   tr.user-registered .userlist-username, .chat-username-registered, .username-registered {

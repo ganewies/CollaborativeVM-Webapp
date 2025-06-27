@@ -47,8 +47,8 @@
 		"kVMButtons_ChangeUsername": "Changer de nom d'utilisateur",
 		"kVMButtons_Keyboard": "Clavier",
 		"KVMButtons_CtrlAltDel": "Ctrl+Alt+Del",
-		"kVMButtons_AudioMute_On": "Démute le son",
-		"kVMButtons_AudioMute_Off": "Mute le son",
+		"kVMButtons_AudioMute_On": "Son désactivé",
+		"kVMButtons_AudioMute_Off": "Son activé",
 
 		"kVMButtons_VoteForReset": "Commencer un vote pour reset",
 		"kVMButtons_Screenshot": "Capture d'écran",

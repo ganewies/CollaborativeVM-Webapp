@@ -365,7 +365,7 @@ async function multicollab(url: string) {
 		div.classList.add('col-sm-5', 'col-md-3');
 		let card = document.createElement('div');
 		card.classList.add('card');
-		if (Config.NSFWVMs.indexOf(vm.id) !== -1) card.classList.add('cvm-nsfw');
+		if (Config.NSFWVMs.indexOf(vm.id as never) !== -1) card.classList.add('cvm-nsfw');
 		card.setAttribute('data-cvm-node', vm.id);
 		card.addEventListener('click', async () => {
 			try {
@@ -448,6 +448,14 @@ async function openVM(vm: VM): Promise<void> {
 	// Wait for the client to open
 	await VM!.WaitForOpen();
 
+	if (Config.Auth.Enabled) {
+		elements.username.classList.remove('username-registered', 'username-unregistered', 'username-admin', 'username-moderator');
+		elements.username.classList.add('username-unregistered');
+	} else {
+		elements.username.classList.remove('username-registered', 'username-unregistered', 'username-admin', 'username-moderator');
+		elements.username.classList.add('username-registered');
+	}
+
 	// Connect to node
 	chatMessage('', `<b>${vm.id}</b><hr>`);
 	let username = Config.Auth.Enabled ? (auth!.account?.username ?? null) : localStorage.getItem('username');
@@ -493,7 +501,8 @@ function closeVM() {
 	// Reset admin and vote panels
 	elements.staffbtns.style.display = 'none';
 	elements.restoreBtn.style.display = 'none';
-	elements.audioBtn.innerHTML = `:mute_emoji: ${I18nStringKey.KVMButtons_AudioMuteLabel_On}`;
+	elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span>`;
+	elements.audioBtnText.innerHTML = I18nStringKey.KVMButtons_AudioMuteLabel_On;
 	elements.rebootBtn.style.display = 'none';
 	elements.bypassTurnBtn.style.display = 'none';
 	elements.endTurnBtn.style.display = 'none';
@@ -507,7 +516,7 @@ function closeVM() {
 	elements.voteYesLabel.innerText = '0';
 	elements.voteNoLabel.innerText = '0';
 	elements.xssCheckbox.checked = false;
-	elements.username.classList.remove('username-admin', 'username-moderator', 'username-registered');
+	elements.username.classList.remove('username-admin', 'username-moderator', 'username-registered', 'username-unregistered');
 	elements.username.classList.add('username-unregistered');
 	// Reset rename button
 	elements.changeUsernameBtn.style.display = "inline-block";
@@ -786,6 +795,17 @@ elements.changeUsernameBtn.addEventListener('click', () => {
 	if (newname === oldname) return;
 	VM?.rename(newname);
 });
+elements.audioBtn.addEventListener('click', () => {
+	if (!VM) return;
+	VM.sendAudioMute();
+	if (VM.getAudioMute()) {
+		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span>`;
+		elements.audioBtnText.innerHTML = I18nStringKey.KVMButtons_AudioMuteLabel_On;
+	} else {
+		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i> <span id="audioBtnText"></span>`;
+		elements.audioBtnText.innerHTML = I18nStringKey.KVMButtons_AudioMuteLabel_Off;
+	}
+});
 elements.takeTurnBtn.addEventListener('click', () => {
 	VM?.turn(turn === -1);
 });
@@ -848,7 +868,7 @@ function doLogin() {
 function onLogin(_rank: Rank, _perms: Permissions) {
 	rank = _rank;
 	perms = _perms;
-	elements.username.classList.remove('username-unregistered', 'username-registered');
+	elements.username.classList.remove('username-registered', 'username-unregistered', 'username-admin', 'username-moderator');
 	if (rank === Rank.Admin) elements.username.classList.add('username-admin');
 	if (rank === Rank.Moderator) elements.username.classList.add('username-moderator');
 	if (rank === Rank.Registered) elements.username.classList.add('username-registered');
@@ -951,7 +971,7 @@ elements.qemuMonitorInput.addEventListener('keypress', (e) => e.key === 'Enter' 
 elements.osk.addEventListener('click', () => elements.oskContainer.classList.toggle('d-none'));
 // Auth stuff
 async function renderAuth() {
-	if (auth === null) throw new Error("Cannot renderAuth when auth is null.");
+	if (auth === null) throw new Error("Cannot call renderAuth when auth is null.");
 	await auth.getAPIInformation();
 	elements.accountDropdownUsername.innerText = TheI18n.GetString(I18nStringKey.kNotLoggedIn);
 	elements.accountDropdownMenuLink.style.display = "block";

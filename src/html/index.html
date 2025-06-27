@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html prefix="og: https://ogp.me/ns#" data-bs-theme="dark">
     <head>
-        <title>CollaborativeVM</title>
+        <title>Loading the webapp...</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8"/>
         <link href="../css/style.css" rel="stylesheet" type="text/css"/>
@@ -15,7 +15,7 @@
         <meta property="og:title" content="CollaborativeVM"/>
         <meta property="og:url" content="https://www.befacivm.us.to/app/"/>
         <meta property="og:description" content="A website that lets you take turns controlling online virtual machines with complete strangers!"/>
-        <meta property="og:site_name" content="Computernewb"/>
+        <meta property="og:site_name" content="ganewies"/>
         <meta property="og:image" content="https://computernewb.com/collab-vm/desktop.png"/>
     </head>
     <body>
@@ -239,17 +239,6 @@
             <div class="row"></div>
         </div>
         <div id="vmview">
-            <div id="vmDisplay"></div>
-            <p id="turnstatus"></p>
-            <div id="voteResetPanel" style="display:none;">
-                <span id="voteResetHeaderText"></span><br/>
-                <button class="btn btn-success" id="voteYesBtn"><i class="fa-solid fa-check"></i> <span id="voteYesBtnText"></span><span class="badge bg-secondary" id="voteYesLabel"></span></button> <button class="btn btn-danger" id="voteNoBtn"><i class="fa-solid fa-ban"></i> <span id="voteNoBtnText"></span><span class="badge bg-secondary" id="voteNoLabel"></span></button><br/>
-                <span id="voteTimeText"></span>
-                <div id="forceVotePanel">
-                    <button class="btn btn-info" id="forceVoteYesBtn"><i class="fa-solid fa-check"></i> <span id="passVoteBtnText"></span></button>
-                    <button class="btn btn-info" id="forceVoteNoBtn"><i class="fa-solid fa-ban"></i> <span id="cancelVoteBtnText"></span></button>
-                </div>
-            </div>
             <div id="btns">
                 <button class="btn btn-secondary" id="takeTurnBtn"><i class="fa-solid fa-computer-mouse"></i> <span id="turnBtnText"></span></button>
                 <button class="btn btn-secondary" id="oskBtn"><i class="fa-solid fa-keyboard"></i> <span id="oskBtnText"></span></button>
@@ -268,6 +257,8 @@
                     <button class="btn btn-secondary" id="qemuMonitorBtn" data-bs-toggle="modal" data-bs-target="#qemuMonitorModal"><i class="fa-solid fa-terminal"></i> <span id="qemuMonitorBtnText"></span></button>
                 </div>
             </div>
+            <p id="turnstatus"></p>
+            <div id="vmDisplay"></div>
             <div class="osk-container d-none" id="osk-container">
                 <div class="osk-main"></div>
 
@@ -281,15 +272,23 @@
                     <div class="osk-numpadEnd"></div>
                 </div>
             </div>
+            <div id="voteResetPanel" style="display:none;">
+                <span id="voteResetHeaderText"></span><br/>
+                <button class="btn btn-success" id="voteYesBtn"><i class="fa-solid fa-check"></i> <span id="voteYesBtnText"></span><span class="badge bg-secondary" id="voteYesLabel"></span></button> <button class="btn btn-danger" id="voteNoBtn"><i class="fa-solid fa-ban"></i> <span id="voteNoBtnText"></span><span class="badge bg-secondary" id="voteNoLabel"></span></button><br/>
+                <span id="voteTimeText"></span>
+                <div id="forceVotePanel">
+                    <button class="btn btn-info" id="forceVoteYesBtn"><i class="fa-solid fa-check"></i> <span id="passVoteBtnText"></span></button>
+                    <button class="btn btn-info" id="forceVoteNoBtn"><i class="fa-solid fa-ban"></i> <span id="cancelVoteBtnText"></span></button>
+                </div>
+            </div>
             <div class="row container-fluid">
                 <div class="col-md-4">
                     <div class="table-responsive username-table">
                         <table class="table table-hover table-borderless">
                             <thead>
                                 <th class="bg-body-tertiary">
-                                    <i class="fa-solid fa-user"></i> <span id="usersOnlineText"></span> (<span id="onlineusercount"></span>)
+                                    <i class="fa-solid fa-user"></i> <span id="usersOnlineText"></span> <span id="onlineusercount"></span>
                                 </th>
-                                <th></th>
                             </thead>
                             <tbody id="userlist"></tbody>
                         </table>
@@ -319,5 +318,5 @@
         <script type="module" src="../ts/main.ts" type="application/javascript"></script>
     </body>
 </html>
-<!-- some shits that i couldnt find on the code ... -->
+<!-- some shits that i couldnt find on the code to remove them completely ... -->
 <span id="changeUsernameBtnText"style="display:none;"></span>

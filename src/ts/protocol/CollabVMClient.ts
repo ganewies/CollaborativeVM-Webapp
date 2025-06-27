@@ -60,7 +60,7 @@ const DefaultCapabilities = [ "bin" ];
 export default class CollabVMClient {
 	// Fields
 	private socket: WebSocket;
-	canvas: HTMLCanvasElement;
+	public canvas: HTMLCanvasElement;
 	// A secondary canvas that is not scaled
 	unscaledCanvas: HTMLCanvasElement;
 	canvasScale : { width : number, height : number } = { width: 0, height: 0 };
