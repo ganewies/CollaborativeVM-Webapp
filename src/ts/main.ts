@@ -395,6 +395,9 @@ async function multicollab(url: string) {
 		console.log(cardsByNodeId);
 		sortVMList();
 
+		if (!window.localStorage.getItem('cards_RealTimeRefreshRate')) window.localStorage.setItem('cards_RealTimeRefreshRate', '7500');
+		//@ts-ignore
+		let refreshRate = parseFloat(window.localStorage.getItem('cards_RealTimeRefreshRate'));
 		setInterval(async () => {
 			if (!VM) {
 				let conn = new CollabVMClient(url);
@@ -405,14 +408,15 @@ async function multicollab(url: string) {
 				conn.close();
 
 				for (let vm of listing) {
-					if (offlineVms.includes(vm.id)) return;
+					//@ts-ignore
+					if (offlineVms.includes(vm.id) || !vm.refreshRate || parseFloat(window.localStorage.getItem('cards_RealTimeRefreshRate')) >= vm.refreshRate ) return;
 					const newthumb = vm.thumbnail.src;
 					thumb.src = newthumb;
 					cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
 					usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> ${onlineUsers}`;
 				}
 			}
-		}, 7500);
+		}, refreshRate);
 	}
 }
 
