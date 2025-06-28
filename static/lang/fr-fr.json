@@ -5,7 +5,6 @@
 	"author": "Befaci",
 
 	"stringKeys": {
-		"kGeneric_CollabVM": "CollabVM",
 		"kGeneric_Yes": "Oui",
 		"kGeneric_No": "Non",
 		"kGeneric_Ok": "OK",
@@ -94,6 +93,11 @@
 		"kAccountModal_VerifyText": "Nous avons envoyez un E-mail à {0}. Pour vérifier votre compte, veuillez entrer le mot de passe à 8 chiffre envoyé par E-mail.",
 		"kAccountModal_VerifyPasswordResetText": "Nous avons envoyez un E-mail à {0}. Pour réinitialiser votre Mot de passe, veuillez entrer le mot de passe à 8 chiffre envoyé par E-mail.",
 		"kAccountModal_PasswordResetSuccess": "Vôtre Mot de passe à été réinitialiser avec succès. Vous pouvez maintenant vous connecter avec votre nouveau Mot de passe.",
+		
+		"kSettingsModal_CustomizationSectionLabel": "Customisation",
+		"kSettingsModal_Customization_ChatStyleLabel": "Style du chat",
+		"kSettingsModal_Customization_ChatStyle_irc": "Par défaut (IRC)",
+		"kSettingsModal_Customization_ChatStyle_default": "Comme Discord",
 
 		"kNotLoggedIn": "Non connecté"
 	}

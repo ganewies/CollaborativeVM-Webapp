@@ -13,7 +13,7 @@
         <!-- Opengraph -->
         <meta property="og:type" content="website"/>
         <meta property="og:title" content="CollaborativeVM"/>
-        <meta property="og:url" content="https://www.befacivm.us.to/app/"/>
+        <meta property="og:url" content="https://cvmbeta.befacivm.us.to/#"/>
         <meta property="og:description" content="A website that lets you take turns controlling online virtual machines with complete strangers!"/>
         <meta property="og:site_name" content="ganewies"/>
         <meta property="og:image" content="https://computernewb.com/collab-vm/desktop.png"/>
@@ -70,6 +70,34 @@
 				</div>
 				<div class="modal-footer">
 				    <button type="button" id="loginButton" class="btn btn-primary"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Webapp Settings ― [ W.I.P ]</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible" id="settingsSaveFailAlert" role="alert">
+                        <span id="settingsSaveFailText"></span>
+                        <button type="button" class="btn-close" aria-label="Close" id="settingsSaveFailDimissBtn"></button>
+                    </div>
+                    <div class="input-group">
+                        <!-- only if auth is enabled -->
+                        <span class="input-group-text" id="settingsFieldUsernameLabel"></span>
+                        <input type="text" name="username" id="username"/>
+                        <!-- global -->
+                        <label for="customization" id="settingsCustomizationSectionLabel"></label>
+                        <input type="radio" name="chatType" id="chatStyling_irc">
+                        <input type="radio" name="chatType" id="chatStyling_default">
+                    </div>
+				</div>
+				<div class="modal-footer">
+				    <button type="button" id="saveSettingsButton" class="btn btn-primary">Save</button>
 				</div>
 			</div>
 		</div>
@@ -239,6 +267,18 @@
             <div class="row"></div>
         </div>
         <div id="vmview">
+            <div id="staffbtns">
+                <button class="btn btn-secondary" id="restoreBtn"><i class="fa-solid fa-rotate-left"></i> <span id="restoreBtnText"></span></button>
+                <button class="btn btn-secondary" id="rebootBtn"><i class="fa-solid fa-power-off"></i> <span id="rebootBtnText"></span></button>
+                <button class="btn btn-secondary" id="clearQueueBtn"><i class="fa-solid fa-eraser"></i> <span id="clearQueueBtnText"></span></button>
+                <button class="btn btn-secondary" id="bypassTurnBtn"><i class="fa-solid fa-forward"></i> <span id="bypassTurnBtnText"></span></button>
+                <button class="btn btn-secondary" id="endTurnBtn"><i class="fa-solid fa-ban"></i>  <span id="endTurnBtnText"></span></button>
+                <button class="btn btn-secondary" id="indefTurnBtn"><i class="fa-solid fa-infinity"></i> <span id="indefTurnBtnText"></span></button>
+                <button class="btn btn-secondary" id="ghostTurnBtn"><i class="fa-solid fa-ghost"></i> <span id="ghostTurnBtnText"></span></button>
+                <button class="btn btn-secondary" id="qemuMonitorBtn" data-bs-toggle="modal" data-bs-target="#qemuMonitorModal"><i class="fa-solid fa-terminal"></i> <span id="qemuMonitorBtnText"></span></button>
+            </div>
+            <p id="turnstatus"></p>
+            <div id="vmDisplay"></div>
             <div id="btns">
                 <button class="btn btn-secondary" id="takeTurnBtn"><i class="fa-solid fa-computer-mouse"></i> <span id="turnBtnText"></span></button>
                 <button class="btn btn-secondary" id="oskBtn"><i class="fa-solid fa-keyboard"></i> <span id="oskBtnText"></span></button>
@@ -246,19 +286,7 @@
                 <button class="btn btn-secondary" id="voteResetButton"><i class="fa-solid fa-rotate-left"></i> <span id="voteForResetBtnText"></span></button>
                 <button class="btn btn-secondary" id="screenshotButton"><i class="fa-solid fa-camera"></i> <span id="screenshotBtnText"></span></button>
                 <button class="btn btn-secondary" id="ctrlAltDelBtn"><i class="fa-solid fa-gear"></i> <span id="ctrlAltDelBtnText"></span></button>
-                <div id="staffbtns">
-                    <button class="btn btn-secondary" id="restoreBtn"><i class="fa-solid fa-rotate-left"></i> <span id="restoreBtnText"></span></button>
-                    <button class="btn btn-secondary" id="rebootBtn"><i class="fa-solid fa-power-off"></i> <span id="rebootBtnText"></span></button>
-                    <button class="btn btn-secondary" id="clearQueueBtn"><i class="fa-solid fa-eraser"></i> <span id="clearQueueBtnText"></span></button>
-                    <button class="btn btn-secondary" id="bypassTurnBtn"><i class="fa-solid fa-forward"></i> <span id="bypassTurnBtnText"></span></button>
-                    <button class="btn btn-secondary" id="endTurnBtn"><i class="fa-solid fa-ban"></i>  <span id="endTurnBtnText"></span></button>
-                    <button class="btn btn-secondary" id="indefTurnBtn"><i class="fa-solid fa-infinity"></i> <span id="indefTurnBtnText"></span></button>
-                    <button class="btn btn-secondary" id="ghostTurnBtn"><i class="fa-solid fa-ghost"></i> <span id="ghostTurnBtnText"></span></button>
-                    <button class="btn btn-secondary" id="qemuMonitorBtn" data-bs-toggle="modal" data-bs-target="#qemuMonitorModal"><i class="fa-solid fa-terminal"></i> <span id="qemuMonitorBtnText"></span></button>
-                </div>
             </div>
-            <p id="turnstatus"></p>
-            <div id="vmDisplay"></div>
             <div class="osk-container d-none" id="osk-container">
                 <div class="osk-main"></div>
 

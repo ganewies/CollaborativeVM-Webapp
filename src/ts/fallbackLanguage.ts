@@ -99,6 +99,11 @@ const fallbackLanguage : Language = {
 		"kAccountModal_VerifyPasswordResetText": "We sent an E-Mail to {0}. To reset your password, please enter the 8-digit code from the E-Mail below.",
 		"kAccountModal_PasswordResetSuccess": "Your password has been changed successfully. You can now log in with your new password.",
 
+		"kSettingsModal_CustomizationSectionLabel": "Customization",
+		"kSettingsModal_Customization_ChatStyleLabel": "Chat Style",
+		"kSettingsModal_Customization_ChatStyle_irc": "Default (IRC)",
+		"kSettingsModal_Customization_ChatStyle_default": "Discord-like",
+
 		"kNotLoggedIn": "Not Logged in"
 	}
 }

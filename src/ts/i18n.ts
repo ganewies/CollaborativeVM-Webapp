@@ -104,6 +104,12 @@ export enum I18nStringKey {
 	kMissingCaptcha = 'kMissingCaptcha',
 	kPasswordsMustMatch = 'kPasswordsMustMatch',
 
+	// Settings
+	kSettingsModal_CustomizationSectionLabel = 'kSettingsModal_CustomizationSectionLabel',
+	kSettingsModal_Customization_ChatStyleLabel = 'kSettingsModal_Customization_ChatStyleLabel',
+	kSettingsModal_Customization_ChatStyle_irc = 'kSettingsModal_Customization_ChatStyle_irc',
+	kSettingsModal_Customization_ChatStyle_default = 'kSettingsModal_Customization_ChatStyle_default',
+
 	kNotLoggedIn = 'kNotLoggedIn',
 }
 

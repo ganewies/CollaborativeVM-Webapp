@@ -28,6 +28,10 @@
   border-color: rgb(158, 218, 9);
 }
 
+.navbar {
+  padding: 8px 13px !important;
+}
+
 .vmtile > img {
   margin-bottom: 2px;
 }
@@ -35,7 +39,7 @@
 .chat-table, .username-table {
   overflow-y: auto;
   border: 1px solid #51544f;
-  border-bottom: 0 solid #ffffff00;
+  border-bottom: 0 solid #00000000;
   border-radius: 9px;
 }
 .chat-table {
@@ -65,12 +69,18 @@
   text-align: center;
 }
 
+#vmdisplay canvas {
+  transition: box-shadow 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), -moz-box-shadow 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), -webkit-box-shadow 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+tbody#userlist tr {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
 .focused {
   box-shadow: 0 0 9px 0 rgba(30, 255, 229, 0.7);
   -moz-box-shadow: 0 0 9px 0 rgba(30, 255, 229, 0.7);
   -webkit-box-shadow: 0 0 9px 0 rgba(30, 255, 229, 0.7)
 }
-
 .waiting {
   box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47);
   -moz-box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47);
@@ -79,7 +89,8 @@
 
 #staffbtns {
   display: none;
-  margin-top: 2.3px;
+  margin: 2.3px 0;
+  text-align: center;
 }
 
 #staffbtns > button {
@@ -123,6 +134,10 @@ html[data-bs-theme="dark"] {
   tr.user-unregistered.user-turn .userlist-username, tr.user-unregistered.user-waiting .userlist-username {
     color: #585858 !important;
     --bs-table-color: #585858 !important;
+  }
+
+  body {
+    background-color: #1b1e20 !important;
   }
 }
 

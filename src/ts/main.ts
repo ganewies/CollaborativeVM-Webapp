@@ -324,6 +324,8 @@ let turn = -1;
 // Listed VMs
 const vms: VM[] = [];
 const cards: HTMLDivElement[] = [];
+let cardsByNodeId: Object = {};
+let offlineVms: string[] = [];
 const users: {
 	user: User;
 	usernameElement: HTMLSpanElement;
@@ -374,20 +376,43 @@ async function multicollab(url: string) {
 				alert((e as Error).message);
 			}
 		});
-		vm.thumbnail.classList.add('card-img-top');
+		let thumb = vm.thumbnail;
+		thumb.classList.add('card-img-top');
 		let cardBody = document.createElement('div');
 		cardBody.classList.add('card-body');
 		let cardTitle = document.createElement('h5');
 		cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
 		let usersOnline = document.createElement('span');
-		usersOnline.innerHTML = `(<i class="fa-solid fa-users"></i> ${online})`;
+		usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> ${online}`;
 		cardBody.appendChild(cardTitle);
 		cardBody.appendChild(usersOnline);
 		card.appendChild(vm.thumbnail);
 		card.appendChild(cardBody);
 		div.appendChild(card);
 		cards.push(div);
+		//@ts-ignore
+		cardsByNodeId[vm.id] = div;
+		console.log(cardsByNodeId);
 		sortVMList();
+
+		setInterval(async () => {
+			if (!VM) {
+				let conn = new CollabVMClient(url);
+
+				await conn.WaitForOpen();
+				let listing = await conn.list();
+				let onlineUsers = await conn.getUsers().length;
+				conn.close();
+
+				for (let vm of listing) {
+					if (offlineVms.includes(vm.id)) return;
+					const newthumb = vm.thumbnail.src;
+					thumb.src = newthumb;
+					cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
+					usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> ${onlineUsers}`;
+				}
+			}
+		}, 7500);
 	}
 }
 
@@ -468,7 +493,7 @@ async function openVM(vm: VM): Promise<void> {
 		throw new Error('Failed to connect to node');
 	}
 	// Set the title
-	document.title = Format('{0} - {1}', vm.id, Config.SiteName);
+	document.title = Format('{0} - {1}', vm.id, I18nStringKey.kGeneric_CollabVM ? TheI18n.GetString(I18nStringKey.kGeneric_CollabVM) : Config.SiteName);
 	// Append canvas
 	elements.vmDisplay.appendChild(VM!.canvas);
 	// Switch to the VM view
@@ -480,10 +505,12 @@ async function openVM(vm: VM): Promise<void> {
 function closeVM() {
 	if (VM === null) return;
 	expectedClose = true;
+	// Reset audio state
+	if (VM!.getAudioMute() === false) VM!.sendAudioMute();
 	// Close the VM
 	VM.close();
 	VM = null;
-	document.title = Config.SiteName;
+	document.title = I18nStringKey.kGeneric_CollabVM ? TheI18n.GetString(I18nStringKey.kGeneric_CollabVM) : Config.SiteName;
 	turn = -1;
 	// Remove the canvas
 	elements.vmDisplay.innerHTML = '';
@@ -496,13 +523,11 @@ function closeVM() {
 	rank = Rank.Unregistered;
 	perms.set(0);
 	w.VMName = null;
-	// Reset audio state
-	if (VM!.getAudioMute() === false) VM!.sendAudioMute();
 	// Reset admin and vote panels
 	elements.staffbtns.style.display = 'none';
 	elements.restoreBtn.style.display = 'none';
-	elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span>`;
-	elements.audioBtnText.innerHTML = I18nStringKey.KVMButtons_AudioMuteLabel_On;
+	elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText">${TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On)}</span>`;
+	elements.audioBtnText.innerHTML = TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On);
 	elements.rebootBtn.style.display = 'none';
 	elements.bypassTurnBtn.style.display = 'none';
 	elements.endTurnBtn.style.display = 'none';
@@ -532,6 +557,7 @@ function closeVM() {
 
 async function loadList() {
 	var jsonVMs = Config.ServerAddressesListURI === null ? [] : await (await fetch(Config.ServerAddressesListURI)).json();
+
 	await Promise.all(
 		[Config.ServerAddresses, jsonVMs].flat().map((url) => {
 			return multicollab(url);
@@ -1562,7 +1588,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	TheI18n.on('languageChanged', lang => {
 		// Update all dynamic text
 		if (VM) {
-			document.title = Format('{0} - {1}', VM.getNode()!, Config.SiteName);
+			document.title = Format('{0} - {1}', VM.getNode()!, I18nStringKey.kGeneric_CollabVM ? TheI18n.GetString(I18nStringKey.kGeneric_CollabVM) : Config.SiteName);
 			if (turn !== -1) {
 				if (turn === 0) elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_TurnTimeTimer, turnTimer);
 				else elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_WaitingTurnTimer, turnTimer);
@@ -1573,9 +1599,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 			if (VM!.getVoteStatus())
 			elements.voteTimeText.innerText = TheI18n.GetString(I18nStringKey.kVM_VoteForResetTimer, voteTimer);
 
-		}
-		else {
-			document.title = Config.SiteName;
+		} else {
+			document.title = I18nStringKey.kGeneric_CollabVM ? TheI18n.GetString(I18nStringKey.kGeneric_CollabVM) : Config.SiteName;
 		}
 		if (!auth || !auth.account) elements.accountDropdownUsername.innerText = TheI18n.GetString(I18nStringKey.kNotLoggedIn);
 		if (darkTheme) elements.toggleThemeBtnText.innerHTML = TheI18n.GetString(I18nStringKey.kSiteButtons_LightMode);
@@ -1612,7 +1637,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	if (hideFlag === null) hideFlag = false;
 	elements.hideFlagCheckbox.checked = hideFlag;
 
-	document.title = Config.SiteName;
+	document.title = I18nStringKey.kGeneric_CollabVM ? TheI18n.GetString(I18nStringKey.kGeneric_CollabVM) : Config.SiteName;
 
 	// Load all VMs
 	loadList();

@@ -44,6 +44,8 @@ export interface CollabVMClientEvents {
 	accountlogin: (success: boolean) => void;
 
 	flag: () => void;
+
+	isanyos: (bool: boolean) => void;
 }
 
 // types for private emitter
@@ -554,6 +556,16 @@ export default class CollabVMClient {
 		});
 	}
 
+	// Check if this VM is an AnyOS one (integrated functionality)
+	checkIfAnyOS(): Promise<boolean> {
+		return new Promise<boolean>(async (res) => {
+			this.send('isAnyOS');
+			this.on('isanyos', (bool) => {
+				return bool;
+			});
+		});
+	}
+
 	// Connect to a node
 	connect(id: string, username: string | null = null): Promise<boolean> {
 		return new Promise((res) => {
@@ -572,6 +584,8 @@ export default class CollabVMClient {
 
 	// Close the connection
 	close() {
+		if (!this.connectedToVM) return; // uuh yea lets prevent
+
 		this.connectedToVM = false;
 
 		// call all unsubscribe callbacks explicitly
