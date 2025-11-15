@@ -33,6 +33,7 @@ const fallbackLanguage : Language = {
 		"kSiteButtons_Rules": "Rules",
 		"kSiteButtons_DarkMode": "Dark Mode",
 		"kSiteButtons_LightMode": "Light Mode",
+		"kSiteButtons_Settings": "Settings",
 
 		"kVM_UsersOnlineText": "Users Online:",
 

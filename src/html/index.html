@@ -89,7 +89,7 @@
                     <div class="input-group">
                         <!-- only if auth is enabled -->
                         <span class="input-group-text" id="settingsFieldUsernameLabel"></span>
-                        <input type="text" name="username" id="username"/>
+                        <input type="text" name="username" id="settingsFieldUsername"/>
                         <!-- global -->
                         <label for="customization" id="settingsCustomizationSectionLabel"></label>
                         <input type="radio" name="chatType" id="chatStyling_irc">
@@ -219,34 +219,28 @@
                             <a id="homeBtn" href="#" class="nav-link active" aria-current="page"><i class="fa-solid fa-house"></i> <span id="homeBtnText"></span></a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://computernewb.com/collab-vm/faq/" class="nav-link"><i class="fa-solid fa-circle-question"></i> <span id="faqBtnText"></span></a>
+                            <a href="https://computernewb.com/collab-vm/faq/" class="nav-link" target="_blank"><i class="fa-solid fa-circle-question"></i> <span id="faqBtnText"></span></a>
                         </li>
                         <li class="nav-item">
-                            <a id="rulesBtn" href="https://computernewb.com/collab-vm/rules" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> <span id="rulesBtnText"></span></a>
+                            <a id="rulesBtn" href="https://computernewb.com/collab-vm/rules" class="nav-link" target="_blank"><i class="fa-solid fa-clipboard-check"></i> <span id="rulesBtnText"></span></a>
                         </li>
+                        <div id="nav-other-items">
+                            
+                        </div>
                         <li class="nav-item">
-                            <a href="https://discord.horse/invite/collabvm" class="nav-link"><i class="fa-brands fa-discord"></i> Discord</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://reddit.com/r/collabvm" class="nav-link"><i class="fa-brands fa-reddit"></i> Subreddit</a>
-                        </li>
-                        <li class="nav-item">
-                            <a rel="me" class="nav-link" href="https://fedi.computernewb.com/@collabvm"><i class="fa-brands fa-mastodon"></i> Mastodon</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://computernewb.com/collab-vm/user-vm" class="nav-link"><i class="fa-solid fa-user"></i> UserVM</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="toggleThemeBtn" href="#" class="nav-link"><i id="toggleThemeIcon" class="fa-solid fa-sun"></i> <span id="toggleThemeBtnText"></span></a>
+                            <a id="toggleThemeBtn" href="javascript:void(0)" class="nav-link"><i id="toggleThemeIcon" class="fa-solid fa-sun"></i> <span id="toggleThemeBtnText"></span></a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a id="languageDropdownLink" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a id="languageDropdownLink" class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-globe"></i> <span id="languageDropdownText"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdownLink">
                                 <span id="languageDropdown"></span>
                                 <a class="dropdown-item" href="https://github.com/computernewb/collab-vm-1.2-webapp/wiki/Contributing-a-Language" target="_blank"><i class="fa-solid fa-plus"></i> Add Yours</a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" class="nav-link" id="settingsOpenBtn"><i class="fa-solid fa-gear"></i> <span id="settingsOpenBtnText"></span></a>
                         </li>
                     </ul>
                     <div class="navbar-text dropdown">
@@ -282,7 +276,7 @@
             <div id="btns">
                 <button class="btn btn-secondary" id="takeTurnBtn"><i class="fa-solid fa-computer-mouse"></i> <span id="turnBtnText"></span></button>
                 <button class="btn btn-secondary" id="oskBtn"><i class="fa-solid fa-keyboard"></i> <span id="oskBtnText"></span></button>
-                <button class="btn btn-secondary" id="audioBtn"><i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span></button>
+                <button class="btn btn-secondary" id="audioBtn" style="display: none !important;"><i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span></button>
                 <button class="btn btn-secondary" id="voteResetButton"><i class="fa-solid fa-rotate-left"></i> <span id="voteForResetBtnText"></span></button>
                 <button class="btn btn-secondary" id="screenshotButton"><i class="fa-solid fa-camera"></i> <span id="screenshotBtnText"></span></button>
                 <button class="btn btn-secondary" id="ctrlAltDelBtn"><i class="fa-solid fa-gear"></i> <span id="ctrlAltDelBtnText"></span></button>
@@ -346,5 +340,3 @@
         <script type="module" src="../ts/main.ts" type="application/javascript"></script>
     </body>
 </html>
-<!-- some shits that i couldnt find on the code to remove them completely ... -->
-<span id="changeUsernameBtnText"style="display:none;"></span>

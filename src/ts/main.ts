@@ -345,6 +345,8 @@ let VM: CollabVMClient | null = null;
 
 async function multicollab(url: string) {
 	// Create the client
+	console.log('⸺⸺⸺⸺⸺⸺ multicollab');
+	console.log('Initializing connection...');
 	let client = new CollabVMClient(url);
 
 	await client.WaitForOpen();
@@ -367,6 +369,7 @@ async function multicollab(url: string) {
 		div.classList.add('col-sm-5', 'col-md-3');
 		let card = document.createElement('div');
 		card.classList.add('card');
+		console.log('Adding NSFW tag if listed on the configuration');
 		if (Config.NSFWVMs.indexOf(vm.id as never) !== -1) card.classList.add('cvm-nsfw');
 		card.setAttribute('data-cvm-node', vm.id);
 		card.addEventListener('click', async () => {
@@ -376,6 +379,7 @@ async function multicollab(url: string) {
 				alert((e as Error).message);
 			}
 		});
+		console.log('Creating the DOM card...');
 		let thumb = vm.thumbnail;
 		thumb.classList.add('card-img-top');
 		let cardBody = document.createElement('div');
@@ -384,32 +388,38 @@ async function multicollab(url: string) {
 		cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
 		let usersOnline = document.createElement('span');
 		usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> ${online}`;
+		console.log('Assembling elements...');
 		cardBody.appendChild(cardTitle);
 		cardBody.appendChild(usersOnline);
 		card.appendChild(vm.thumbnail);
 		card.appendChild(cardBody);
+		console.log('Putting the card');
 		div.appendChild(card);
+		console.log('Created the card!');
+		console.log('Adding to arrays cards and cardsByNodeId');
 		cards.push(div);
 		//@ts-ignore
 		cardsByNodeId[vm.id] = div;
-		console.log(cardsByNodeId);
+		console.log('Sorting...');
 		sortVMList();
+		console.log('Sorted!');
+		console.log('⸺⸺⸺⸺⸺⸺ multicollab');
 
-		if (!window.localStorage.getItem('cards_RealTimeRefreshRate')) window.localStorage.setItem('cards_RealTimeRefreshRate', '7500');
+		if (!window.localStorage.getItem('card-refresh-rate')) window.localStorage.setItem('card-refresh-rate', '5000');
 		//@ts-ignore
-		let refreshRate = parseFloat(window.localStorage.getItem('cards_RealTimeRefreshRate'));
+		let refreshRate = parseFloat(window.localStorage.getItem('card-refresh-rate'));
 		setInterval(async () => {
-			if (!VM) {
+			if (vm && !VM) {
 				let conn = new CollabVMClient(url);
 
 				await conn.WaitForOpen();
 				let listing = await conn.list();
-				let onlineUsers = await conn.getUsers().length;
+				let onlineUsers = conn.getUsers().length;
 				conn.close();
 
 				for (let vm of listing) {
 					//@ts-ignore
-					if (offlineVms.includes(vm.id) || !vm.refreshRate || parseFloat(window.localStorage.getItem('cards_RealTimeRefreshRate')) >= vm.refreshRate ) return;
+					if (offlineVms.includes(vm.id) || !vm.refreshRate || vm.refreshRate <= parseFloat(window.localStorage.getItem('card-refresh-rate'))) return;
 					const newthumb = vm.thumbnail.src;
 					thumb.src = newthumb;
 					cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
@@ -742,26 +752,34 @@ function turnUpdate(status: TurnStatus) {
 
 	if (status.user !== null) {
 		let el = users.find((u) => u.user === status.user)!.element;
+		void el.offsetWidth
 		el!.classList.add('user-turn');
+		void el.offsetWidth
 		el!.setAttribute('data-cvm-turn', '0');
 	}
 	for (const user of status.queue) {
 		let el = users.find((u) => u.user === user)!.element;
+		void el.offsetWidth
 		el!.classList.add('user-waiting');
+		void el.offsetWidth
 		el.setAttribute('data-cvm-turn', status.queue.indexOf(user).toString(10));
 	}
 	if (status.user?.username === w.username) {
 		turn = 0;
 		turnTimer = status.turnTime! / 1000;
 		elements.turnBtnText.innerHTML = TheI18n.GetString(I18nStringKey.kVMButtons_EndTurn);
+		void VM!.canvas.offsetWidth
 		VM!.canvas.classList.add('focused');
+		void VM!.canvas.offsetWidth
 		enableOSK(true);
 	}
 	if (status.queue.some((u) => u.username === w.username)) {
 		turn = status.queue.findIndex((u) => u.username === w.username) + 1;
 		turnTimer = status.queueTime! / 1000;
 		elements.turnBtnText.innerHTML = TheI18n.GetString(I18nStringKey.kVMButtons_EndTurn);
+		void VM!.canvas.offsetWidth
 		VM!.canvas.classList.add('waiting');
+		void VM!.canvas.offsetWidth
 	}
 	if (turn === -1) elements.turnstatus.innerText = '';
 	else {
@@ -829,11 +847,11 @@ elements.audioBtn.addEventListener('click', () => {
 	if (!VM) return;
 	VM.sendAudioMute();
 	if (VM.getAudioMute()) {
-		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span>`;
-		elements.audioBtnText.innerHTML = I18nStringKey.KVMButtons_AudioMuteLabel_On;
+		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span>`; //${TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On)}
+		elements.audioBtnText.innerHTML = TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On);
 	} else {
-		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i> <span id="audioBtnText"></span>`;
-		elements.audioBtnText.innerHTML = I18nStringKey.KVMButtons_AudioMuteLabel_Off;
+		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i> <span id="audioBtnText"></span>`; //${TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_Off)}
+		elements.audioBtnText.innerHTML = TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_Off);
 	}
 });
 elements.takeTurnBtn.addEventListener('click', () => {
@@ -1645,6 +1663,83 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	// Load all VMs
 	loadList();
+
+	// Navbar items from the config
+	const thediv = document.getElementById('nav-other-items') as HTMLDivElement;
+	if (Config.Navbar.FAQ) document.getElementById('faqnavitem')?.remove();
+	if (Config.Navbar.Discord) {
+		const item = document.createElement('li');
+		const itemlink = document.createElement('a');
+		item.appendChild(itemlink);
+
+		const icon = '<i class="fa-brands fa-discord"></i>';
+		const text = 'Discord';
+		itemlink.innerHTML = `${icon} ${text}`;
+		//@ts-ignore
+		itemlink.href = "https://discord.com/invite/" + Config.Navbar.Discord;
+		itemlink.classList.add('nav-link');
+
+		thediv.appendChild(item);
+	}
+	if (Config.Navbar.Mastodon) {
+		const item = document.createElement('li');
+		const itemlink = document.createElement('a');
+		item.appendChild(itemlink);
+
+		const icon = '<i class="fa-brands fa-mastodon"></i>';
+		const text = 'Mastodon';
+		itemlink.innerHTML = `${icon} ${text}`;
+		//@ts-ignore
+		itemlink.href = Config.Navbar.Mastodon;
+		itemlink.classList.add('nav-link');
+
+		thediv.appendChild(item);
+	}
+	if (Config.Navbar.SubReddit) {
+		const item = document.createElement('li');
+		const itemlink = document.createElement('a');
+		item.appendChild(itemlink);
+
+		const icon = '<i class="fa-brands fa-reddit"></i>';
+		const text = 'Subreddit';
+		itemlink.innerHTML = `${icon} ${text}`;
+		//@ts-ignore
+		itemlink.href = "https://reddit.com/" + Config.Navbar.SubReddit;
+		itemlink.classList.add('nav-link');
+
+		thediv.appendChild(item);
+	}
+	if (Config.Navbar.Guilded) {
+		const item = document.createElement('li');
+		const itemlink = document.createElement('a');
+		item.appendChild(itemlink);
+
+		const icon = '<i class="fa-brands fa-guilded"></i>';
+		const text = 'Guilded';
+		itemlink.innerHTML = `${icon} ${text}`;
+		//@ts-ignore
+		itemlink.href = "https://www.guilded.gg/invite/" + Config.Navbar.Guilded;
+		itemlink.classList.add('nav-link');
+
+		thediv.appendChild(item);
+	}
+
+	if (Config.Navbar.Custom && Config.Navbar.Custom.length > 0) for (let item in Config.Navbar.Custom) {
+		const _item = document.createElement('li');
+		const itemlink = document.createElement('a');
+		_item.appendChild(itemlink);
+
+		//@ts-ignore
+		const icon = `<i class="fa-${item.icon.split(' ')[0]} fa-${item.icon.split(' ')[1]}"></i>`;
+		//@ts-ignore
+		const text = item.label;
+		itemlink.innerHTML = `${icon} ${text}`;
+		//@ts-ignore
+		itemlink.href = item.link;
+		itemlink.classList.add('nav-link');
+
+		thediv.appendChild(_item);
+	}
 
 	// Welcome modal
 	let welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal') as HTMLDivElement);

@@ -33,6 +33,7 @@ export enum I18nStringKey {
 	kSiteButtons_DarkMode = 'kSiteButtons_DarkMode',
 	kSiteButtons_LightMode = 'kSiteButtons_LightMode',
 	kSiteButtons_Languages = 'kSiteButtons_Languages',
+	kSiteButtons_Settings = 'kSiteButtons_Settings',
 
 	kVM_UsersOnlineText = 'kVM_UsersOnlineText',
 
@@ -268,6 +269,7 @@ export class I18n {
 			homeBtnText: I18nStringKey.kSiteButtons_Home,
 			faqBtnText: I18nStringKey.kSiteButtons_FAQ,
 			rulesBtnText: I18nStringKey.kSiteButtons_Rules,
+			settingsOpenBtnText: I18nStringKey.kSiteButtons_Settings,
 			accountLoginButton: I18nStringKey.kGeneric_Login,
 			accountRegisterButton: I18nStringKey.kGeneric_Register,
 			accountSettingsButton: I18nStringKey.kAccountModal_AccountSettings,
@@ -448,7 +450,7 @@ export class I18n {
 
 	// Returns a (raw, unformatted) string. Currently only used if we don't need formatting.
 	GetStringRaw(key: I18nStringKey): string {
-		if (key === I18nStringKey.kGeneric_CollabVM && Config.OverrideSiteNameTitle) return Config.SiteName;
+		if (key === I18nStringKey.kGeneric_CollabVM) return Config.SiteName;
 		if (key === I18nStringKey.kWelcomeModal_Header && Config.WelcomeModalTitleOverride) return Config.WelcomeModalTitleOverride;
 		if (key === I18nStringKey.kWelcomeModal_Body && Config.WelcomeModalBodyOverride) return Config.WelcomeModalBodyOverride;
 		let val = this.lang.stringKeys[key];
@@ -459,7 +461,7 @@ export class I18n {
 		if (val == undefined) {
 			let fallback = fallbackLanguage.stringKeys[key];
 			if (fallback !== undefined) val = fallback;
-			else return `${key} (ERR LOOKING TRANSLATION)`;
+			else return `${key} (ERR I18N)`;
 		}
 
 		return val;

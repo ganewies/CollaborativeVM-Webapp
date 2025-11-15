@@ -13,6 +13,16 @@
         "wss://vms.befacivm.us.to/4"
     ],
     "ServerAddressesListURI": null,
+    "Navbar": {
+        "FAQ": true,
+        "Discord": "xxxxxxxxxx",
+        "SubReddit": "r/ganewies",
+        "Guilded": "xxxxxxxxxxxxxx",
+        "Mastodon": false,
+        "Custom": [
+            { "icon": "solid circle-question", "label": "Example", "link": "https://example.net" }
+        ]
+    },
     "NSFWVMs": ["befvm00"],
     "RawMessages": {
         "VMTitles": true,
