@@ -11,7 +11,7 @@ import VoteStatus from './protocol/VoteStatus.js';
 import * as bootstrap from 'bootstrap';
 import MuteState from './protocol/MuteState.js';
 import { I18nStringKey, TheI18n } from './i18n.js';
-import { Format } from './format.js';
+import { Format, FormatEmojiIdToEmoji, FormatEmojiToEmojiId } from './format.js';
 import AuthManager from './AuthManager.js';
 import dayjs from 'dayjs';
 import * as dompurify from 'dompurify';
@@ -43,7 +43,7 @@ let elements = {
 	oskContainer: document.getElementById('osk-container') as HTMLDivElement,
 	screenshotButton: document.getElementById('screenshotButton') as HTMLButtonElement,
 	voteResetButton: document.getElementById('voteResetButton') as HTMLButtonElement,
-	voteResetPanel: document.getElementById('voteResetPanel') as HTMLDivElement,
+	votePanel: document.getElementById('votePanel') as HTMLDivElement,
 	voteYesBtn: document.getElementById('voteYesBtn') as HTMLButtonElement,
 	voteNoBtn: document.getElementById('voteNoBtn') as HTMLButtonElement,
 	voteYesLabel: document.getElementById('voteYesLabel') as HTMLSpanElement,
@@ -366,11 +366,12 @@ async function multicollab(url: string) {
 	// Add to the DOM
 	for (let vm of list) {
 		let div = document.createElement('div');
-		div.classList.add('col-sm-5', 'col-md-3');
+		div.className = 'col-sm-5 col-md-3';
 		let card = document.createElement('div');
-		card.classList.add('card');
+		card.className = 'card';
 		console.log('Adding NSFW tag if listed on the configuration');
 		if (Config.NSFWVMs.indexOf(vm.id as never) !== -1) card.classList.add('cvm-nsfw');
+		console.log('Adding identifier and "click" event');
 		card.setAttribute('data-cvm-node', vm.id);
 		card.addEventListener('click', async () => {
 			try {
@@ -381,17 +382,23 @@ async function multicollab(url: string) {
 		});
 		console.log('Creating the DOM card...');
 		let thumb = vm.thumbnail;
-		thumb.classList.add('card-img-top');
+		thumb.className = 'card-img-top';
 		let cardBody = document.createElement('div');
-		cardBody.classList.add('card-body');
+		cardBody.className = 'card-body';
 		let cardTitle = document.createElement('h5');
 		cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
 		let usersOnline = document.createElement('span');
 		usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> ${online}`;
+		let lostConn = document.createElement('l-ping');
+		lostConn.className = 'd-none';
+		lostConn.setAttribute('size', "300");
+		lostConn.setAttribute('speed', "2.4");
+		lostConn.setAttribute('color', darkTheme ? "white" : "black");
 		console.log('Assembling elements...');
 		cardBody.appendChild(cardTitle);
 		cardBody.appendChild(usersOnline);
-		card.appendChild(vm.thumbnail);
+		card.appendChild(lostConn);
+		card.appendChild(thumb);
 		card.appendChild(cardBody);
 		console.log('Putting the card');
 		div.appendChild(card);
@@ -402,31 +409,34 @@ async function multicollab(url: string) {
 		cardsByNodeId[vm.id] = div;
 		console.log('Sorting...');
 		sortVMList();
-		console.log('Sorted!');
 		console.log('⸺⸺⸺⸺⸺⸺ multicollab');
 
-		if (!window.localStorage.getItem('card-refresh-rate')) window.localStorage.setItem('card-refresh-rate', '5000');
-		//@ts-ignore
-		let refreshRate = parseFloat(window.localStorage.getItem('card-refresh-rate'));
 		setInterval(async () => {
 			if (vm && !VM) {
+				console.log('point:start')
 				let conn = new CollabVMClient(url);
 
-				await conn.WaitForOpen();
+				await conn.WaitForOpen().catch(()=> (
+				  lostConn.className = 'card-img-top', thumb.className = 'd-none',
+				  usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> -1`,
+				  cardTitle.innerHTML = 'Virtual Machine offline'
+				));
+				lostConn.className = 'd-none';thumb.className = 'card-img-top'
+
 				let listing = await conn.list();
 				let onlineUsers = conn.getUsers().length;
 				conn.close();
 
 				for (let vm of listing) {
-					//@ts-ignore
-					if (offlineVms.includes(vm.id) || !vm.refreshRate || vm.refreshRate <= parseFloat(window.localStorage.getItem('card-refresh-rate'))) return;
+					console.log('point:l')
 					const newthumb = vm.thumbnail.src;
 					thumb.src = newthumb;
 					cardTitle.innerHTML = Config.RawMessages.VMTitles ? vm.displayName : dompurify.sanitize(vm.displayName);
 					usersOnline.innerHTML = `<i class="fa-solid fa-users"></i> ${onlineUsers}`;
+					console.log('point:end')
 				}
 			}
-		}, refreshRate);
+		}, 3000);
 	}
 }
 
@@ -540,8 +550,7 @@ function closeVM() {
 	// Reset admin and vote panels
 	elements.staffbtns.style.display = 'none';
 	elements.restoreBtn.style.display = 'none';
-	elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText">${TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On)}</span>`;
-	elements.audioBtnText.innerHTML = TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On);
+	elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText">${TheI18n.GetString(I18nStringKey.kVMButtons_AudioMute_On)}</span>`
 	elements.rebootBtn.style.display = 'none';
 	elements.bypassTurnBtn.style.display = 'none';
 	elements.endTurnBtn.style.display = 'none';
@@ -551,7 +560,7 @@ function closeVM() {
 	elements.ghostTurnBtn.style.display = 'none';
 	elements.xssCheckboxContainer.style.display = 'none';
 	elements.forceVotePanel.style.display = 'none';
-	elements.voteResetPanel.style.display = 'none';
+	elements.votePanel.style.display = 'none';
 	elements.voteYesLabel.innerText = '0';
 	elements.voteNoLabel.innerText = '0';
 	elements.xssCheckbox.checked = false;
@@ -647,8 +656,9 @@ function chatMessage(username: string, message: string) {
 				msgclass = 'chat-moderator';
 				break;
 		}
+		//@ts-ignore
 		tr.classList.add(msgclass);
-		td.innerHTML = `<b class="${userclass}">${username}▸</b> ${message}`;
+		td.innerHTML = `<b class="${userclass}">${username}᠉</b> ${FormatEmojiIdToEmoji(message)}`;
 	}
 	// hacky way to allow scripts
 	if (Config.RawMessages.Messages) Array.prototype.slice.call(td.children).forEach((curr) => {
@@ -680,6 +690,9 @@ function addUser(user: User) {
 	td.appendChild(usernameSpan);
 	usernameSpan.innerText = user.username;
 	switch (user.rank) {
+		case Rank.Owner:
+			tr.classList.add('user-owner');
+			break;
 		case Rank.Admin:
 			tr.classList.add('user-admin');
 			break;
@@ -781,8 +794,10 @@ function turnUpdate(status: TurnStatus) {
 		VM!.canvas.classList.add('waiting');
 		void VM!.canvas.offsetWidth
 	}
-	if (turn === -1) elements.turnstatus.innerText = '';
-	else {
+	if (turn === -1) {
+		elements.turnstatus.innerText = '';
+		if (elements.turnstatus.classList.contains('show')) elements.turnstatus.classList.remove('show')
+	} else {
 		//@ts-ignore
 		turnInterval = setInterval(() => turnIntervalCb(), 1000);
 		setTurnStatus();
@@ -792,7 +807,7 @@ function turnUpdate(status: TurnStatus) {
 
 function voteUpdate(status: VoteStatus) {
 	clearInterval(voteInterval);
-	elements.voteResetPanel.style.display = 'block';
+	elements.votePanel.style.display = 'block';
 	elements.voteYesLabel.innerText = status.yesVotes.toString();
 	elements.voteNoLabel.innerText = status.noVotes.toString();
 	voteTimer = Math.floor(status.timeToEnd / 1000);
@@ -809,7 +824,7 @@ function updateVoteEndTime() {
 
 function voteEnd() {
 	clearInterval(voteInterval);
-	elements.voteResetPanel.style.display = 'none';
+	elements.votePanel.style.display = 'none';
 }
 
 function turnIntervalCb() {
@@ -818,14 +833,19 @@ function turnIntervalCb() {
 }
 
 function setTurnStatus() {
-	if (turn === 0) elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_TurnTimeTimer, turnTimer);
-	else elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_WaitingTurnTimer, turnTimer);
+	if (turn === 0) {
+		elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_TurnTimeTimer, turnTimer);
+		if (!elements.turnstatus.classList.contains('show')) elements.turnstatus.classList.add('show');
+	} else {
+		elements.turnstatus.innerText = TheI18n.GetString(I18nStringKey.kVM_WaitingTurnTimer, turnTimer);
+		if (!elements.turnstatus.classList.contains('show')) elements.turnstatus.classList.add('show');
+	}
 }
 
 function sendChat() {
 	if (VM === null) return;
-	if (elements.xssCheckbox.checked) VM.xss(elements.chatinput.value);
-	else VM.chat(elements.chatinput.value);
+	if (elements.xssCheckbox.checked) VM.xss(FormatEmojiToEmojiId(elements.chatinput.value));
+	else VM.chat(FormatEmojiToEmojiId(elements.chatinput.value));
 	elements.chatinput.value = '';
 }
 
@@ -846,12 +866,10 @@ elements.changeUsernameBtn.addEventListener('click', () => {
 elements.audioBtn.addEventListener('click', () => {
 	if (!VM) return;
 	VM.sendAudioMute();
-	if (VM.getAudioMute()) {
-		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span>`; //${TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On)}
-		elements.audioBtnText.innerHTML = TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_On);
+	if (VM.audioMute) {
+		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText">${TheI18n.GetString(I18nStringKey.kVMButtons_AudioMute_On)}</span>`;
 	} else {
-		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i> <span id="audioBtnText"></span>`; //${TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_Off)}
-		elements.audioBtnText.innerHTML = TheI18n.GetString(I18nStringKey.KVMButtons_AudioMuteLabel_Off);
+		elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i> <span id="audioBtnText">${TheI18n.GetString(I18nStringKey.kVMButtons_AudioMute_Off)}</span>`;
 	}
 });
 elements.takeTurnBtn.addEventListener('click', () => {
@@ -916,7 +934,8 @@ function doLogin() {
 function onLogin(_rank: Rank, _perms: Permissions) {
 	rank = _rank;
 	perms = _perms;
-	elements.username.classList.remove('username-registered', 'username-unregistered', 'username-admin', 'username-moderator');
+	elements.username.classList.remove('username-registered', 'username-unregistered', 'username-admin', 'username-moderator', 'username-owner');
+	if (rank === Rank.Owner) elements.username.classList.add('username-owner');
 	if (rank === Rank.Admin) elements.username.classList.add('username-admin');
 	if (rank === Rank.Moderator) elements.username.classList.add('username-moderator');
 	if (rank === Rank.Registered) elements.username.classList.add('username-registered');
@@ -1541,14 +1560,12 @@ function loadColorTheme(dark : boolean) {
 		darkTheme = true;
 		document.children[0].setAttribute("data-bs-theme", "dark");
 		elements.toggleThemeBtnText.innerHTML = TheI18n.GetString(I18nStringKey.kSiteButtons_LightMode);
-		elements.toggleThemeIcon.classList.remove("fa-moon");
-		elements.toggleThemeIcon.classList.add("fa-sun");
+		elements.toggleThemeIcon.className = "fa-sun";
 	} else {
 		darkTheme = false;
 		document.children[0].setAttribute("data-bs-theme", "light");
 		elements.toggleThemeBtnText.innerHTML = TheI18n.GetString(I18nStringKey.kSiteButtons_DarkMode);
-		elements.toggleThemeIcon.classList.remove("fa-sun");
-		elements.toggleThemeIcon.classList.add("fa-moon");
+		elements.toggleThemeIcon.className = "fa-moon";
 	}
 }
 elements.toggleThemeBtn.addEventListener('click', e => {
@@ -1664,9 +1681,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// Load all VMs
 	loadList();
 
+	// Check settings
+	//TODO if (typeof localStorage.getItem(''))
+
 	// Navbar items from the config
 	const thediv = document.getElementById('nav-other-items') as HTMLDivElement;
-	if (Config.Navbar.FAQ) document.getElementById('faqnavitem')?.remove();
+	if (!Config.Navbar.FAQ) document.getElementById('faqnavitem')?.remove();
 	if (Config.Navbar.Discord) {
 		const item = document.createElement('li');
 		const itemlink = document.createElement('a');
@@ -1695,7 +1715,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		thediv.appendChild(item);
 	}
-	if (Config.Navbar.SubReddit) {
+	if (Config.Navbar.Reddit) {
 		const item = document.createElement('li');
 		const itemlink = document.createElement('a');
 		item.appendChild(itemlink);
@@ -1704,7 +1724,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		const text = 'Subreddit';
 		itemlink.innerHTML = `${icon} ${text}`;
 		//@ts-ignore
-		itemlink.href = "https://reddit.com/" + Config.Navbar.SubReddit;
+		itemlink.href = "https://reddit.com/" + Config.Navbar.Reddit;
 		itemlink.classList.add('nav-link');
 
 		thediv.appendChild(item);
@@ -1756,9 +1776,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 		}, 5000);
 	}
 	elements.rulesBtn.addEventListener('click', e => {
-		if (TheI18n.CurrentLanguage() !== "en-us") {
+		if (TheI18n.langId !== "en-us") {
 			e.preventDefault();
 			welcomeModal.show();
 		}
 	});
+
+	// audio button thingy
+	elements.audioBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText">${TheI18n.GetString(I18nStringKey.kVMButtons_AudioMute_On)}</span>`;
 });

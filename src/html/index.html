@@ -17,8 +17,54 @@
         <meta property="og:description" content="A website that lets you take turns controlling online virtual machines with complete strangers!"/>
         <meta property="og:site_name" content="ganewies"/>
         <meta property="og:image" content="https://computernewb.com/collab-vm/desktop.png"/>
+        <!-- LDRS stuff -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/grid.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/quantum.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/squircle.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/infinity.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/ping.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/hourglass.js"></script>
     </head>
     <body>
+        <div id="ldr" class="fade" tabindex="-2">
+            <l-quantum
+                size="69"
+                speed="1.1"
+                color="red"
+                class="d-none"
+            ></l-quantum>
+            <l-grid
+                size="69"
+                speed="0.8"
+                color="red"
+                class="d-none"
+            ></l-grid>
+            <l-squircle
+                size="80"
+                stroke="8"
+                stroke-length="0.20"
+                bg-opacity="0.04"
+                speed="0.85"
+                color="red"
+                class="d-none"
+            ></l-squircle>
+            <l-infinity
+                size="55"
+                stroke="4"
+                stroke-length="0.15"
+                bg-opacity="0.1"
+                speed="1.3"
+                color="red"
+                class="d-none"
+            ></l-infinity>
+            <l-hourglass
+                size="60"
+                bg-opacity="0.15"
+                speed="2.1"
+                color="red"
+                class="d-none"
+            ></l-hourglass>
+        </div>
         <div class="modal fade" id="qemuMonitorModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -87,13 +133,30 @@
                         <button type="button" class="btn-close" aria-label="Close" id="settingsSaveFailDimissBtn"></button>
                     </div>
                     <div class="input-group">
-                        <!-- only if auth is enabled -->
-                        <span class="input-group-text" id="settingsFieldUsernameLabel"></span>
-                        <input type="text" name="username" id="settingsFieldUsername"/>
                         <!-- global -->
-                        <label for="customization" id="settingsCustomizationSectionLabel"></label>
-                        <input type="radio" name="chatType" id="chatStyling_irc">
-                        <input type="radio" name="chatType" id="chatStyling_default">
+                        <legend id="settingsCustomizationSectionLabel">Chat Style</legend>
+                        <label for="chatStyling_irc">
+                            <input type="radio" name="chatType" id="chatStyling_irc" value="irc">
+                            IRC Style
+                        </label>
+                        <span style="padding: 0 6px;"></span>
+                        <label for="chatStyling_default">
+                            <input type="radio" name="chatType" id="chatStyling_default" value="default">
+                            Default Style
+                        </label>
+                        <div>
+                            <legend id="settingsChangeUsernameSectionLabel">Change Username</legend>
+                            <label for="changeUsername_newName">
+                                New Username
+                                <input type="text" name="username" id="settingsFieldUsername"/>
+                            </label>
+                            <!-- only if auth is enabled -->
+                            <label for="changeUsername_confirmPassword" style="display:none;">
+                                Password
+                                <input type="password" name="confirmpass" id="settingsFieldConfirmPassword"/>
+                            </label>
+                        </div>
+
                     </div>
 				</div>
 				<div class="modal-footer">
@@ -240,7 +303,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a href="javascript:void(0)" class="nav-link" id="settingsOpenBtn"><i class="fa-solid fa-gear"></i> <span id="settingsOpenBtnText"></span></a>
+                            <a href="javascript:void(0)" class="nav-link" id="settingsOpenBtn" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear"></i> <span id="settingsOpenBtnText"></span></a>
                         </li>
                     </ul>
                     <div class="navbar-text dropdown">
@@ -271,12 +334,11 @@
                 <button class="btn btn-secondary" id="ghostTurnBtn"><i class="fa-solid fa-ghost"></i> <span id="ghostTurnBtnText"></span></button>
                 <button class="btn btn-secondary" id="qemuMonitorBtn" data-bs-toggle="modal" data-bs-target="#qemuMonitorModal"><i class="fa-solid fa-terminal"></i> <span id="qemuMonitorBtnText"></span></button>
             </div>
-            <p id="turnstatus"></p>
             <div id="vmDisplay"></div>
             <div id="btns">
                 <button class="btn btn-secondary" id="takeTurnBtn"><i class="fa-solid fa-computer-mouse"></i> <span id="turnBtnText"></span></button>
                 <button class="btn btn-secondary" id="oskBtn"><i class="fa-solid fa-keyboard"></i> <span id="oskBtnText"></span></button>
-                <button class="btn btn-secondary" id="audioBtn" style="display: none !important;"><i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span></button>
+                <button class="btn btn-secondary" id="audioBtn"><i class="fa-solid fa-volume-xmark"></i> <span id="audioBtnText"></span></button>
                 <button class="btn btn-secondary" id="voteResetButton"><i class="fa-solid fa-rotate-left"></i> <span id="voteForResetBtnText"></span></button>
                 <button class="btn btn-secondary" id="screenshotButton"><i class="fa-solid fa-camera"></i> <span id="screenshotBtnText"></span></button>
                 <button class="btn btn-secondary" id="ctrlAltDelBtn"><i class="fa-solid fa-gear"></i> <span id="ctrlAltDelBtnText"></span></button>
@@ -294,8 +356,8 @@
                     <div class="osk-numpadEnd"></div>
                 </div>
             </div>
-            <div id="voteResetPanel" style="display:none;">
-                <span id="voteResetHeaderText"></span><br/>
+            <div id="votePanel" style="display:none;">
+                <span id="voteResetHeaderText" style="display:none"></span><span id="voteRebootHeaderText" style="display:none"></span><br/>
                 <button class="btn btn-success" id="voteYesBtn"><i class="fa-solid fa-check"></i> <span id="voteYesBtnText"></span><span class="badge bg-secondary" id="voteYesLabel"></span></button> <button class="btn btn-danger" id="voteNoBtn"><i class="fa-solid fa-ban"></i> <span id="voteNoBtnText"></span><span class="badge bg-secondary" id="voteNoLabel"></span></button><br/>
                 <span id="voteTimeText"></span>
                 <div id="forceVotePanel">
@@ -318,6 +380,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="table-responsive chat-table" id="chatListDiv">
+                        <p id="turnstatus" class="collapse"></p>
                         <table class="table table-hover table-borderless">
                             <tbody id="chatList">
 
@@ -326,7 +389,7 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text username-unregistered" id="username"></span>
-                        <button id="changeUsernameBtn" aria-label="Change the username"><i class="fa-solid fa-signature"></i></button>
+                        <button id="changeUsernameBtn" aria-label="Change the username" class="btn btn-secondary" type="button"><i class="fa-solid fa-signature"></i></button>
                         <input type="text" class="form-control" id="chat-input"/>
                         <div class="input-group-text" id="xssCheckboxContainer">
                             <input class="form-check-input" type="checkbox" value="" id="xssCheckbox"/>

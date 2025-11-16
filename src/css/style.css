@@ -46,6 +46,7 @@
   height: 30vh;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  padding-top: 2em;
 }
 
 .username-table {
@@ -63,7 +64,11 @@
 }
 
 #turnstatus {
-  text-align: center;
+  z-index: 0;
+  padding: 5px 8px;
+  position: absolute;
+  user-select: none;
+  transform: translateX(200%) translateY(-24px);
 }
 #voteResetPanel {
   text-align: center;
@@ -85,6 +90,10 @@ tbody#userlist tr {
   box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47);
   -moz-box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47);
   -webkit-box-shadow: 0 0 9px 0 rgba(244, 234, 46, 0.47)
+}
+
+body {
+  margin-bottom: 14px !important; /* idk why not */
 }
 
 #staffbtns {
@@ -376,3 +385,6 @@ Theme: cvmDisabled (its a theme? bruh ok - ganewies team)
 .userlist-flag:empty {
   display: none;
 }
+
+/* some css shits */
+#nav-other-items { display: flex }

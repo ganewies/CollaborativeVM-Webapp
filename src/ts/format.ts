@@ -1,6 +1,8 @@
 import { StringLike } from './StringLike';
+import emojis from '../../emojis.json';
 
 function isalpha(char: number) {
+	//@ts-ignore
 	return RegExp(/^\p{L}/, 'u').test(String.fromCharCode(char));
 }
 
@@ -74,4 +76,19 @@ export function Format(pattern: string, ...args: Array<StringLike>) {
 	}
 
 	return pat;
+}
+
+export function FormatEmojiIdToEmoji(message: string): string {
+	let output: string = message;
+	//@ts-ignore
+	emojis.forEach((e) => output = output.replaceAll(`:${e[0]}:`, e[1]));
+
+	return output;
+}
+export function FormatEmojiToEmojiId(message: string): string {
+	let output: string = message;
+	//@ts-ignore
+	emojis.forEach((e) => output = output.replaceAll(e[1], `:${e[0]}:`));
+
+	return output;
 }

@@ -9,6 +9,9 @@ export class Permissions {
 	rename: boolean = false;
 	grabip: boolean = false;
 	xss: boolean = false;
+	hideScreen: boolean = false;
+	cutScreen: boolean = false;
+	clearChat: boolean = false;
 
 	constructor(mask: number) {
 		this.set(mask);
@@ -25,6 +28,9 @@ export class Permissions {
 		this.rename = (mask & 128) !== 0;
 		this.grabip = (mask & 256) !== 0;
 		this.xss = (mask & 512) !== 0;
+		this.hideScreen = (mask & 1024) !== 0;
+		this.grabip = (mask & 2058) !== 0;
+		this.clearChat = (mask & 4116) !== 0;
 	}
 }
 
@@ -32,7 +38,8 @@ export enum Rank {
 	Unregistered = 0,
 	Registered = 1,
 	Admin = 2,
-	Moderator = 3
+	Moderator = 3,
+	Owner = 9
 }
 
 // All used admin opcodes as a enum
@@ -54,5 +61,7 @@ export enum AdminOpcode {
 	ToggleTurns = 22,
 	IndefiniteTurn = 23,
 	HideScreen = 24,
-	ClearChat = 26
+	CutScreen = 25,
+	ClearChat = 26,
+	SystemMsg = 99
 }

@@ -42,15 +42,17 @@ const fallbackLanguage : Language = {
 		"kVM_VoteCooldownTimer": "Please wait {0} seconds before starting another vote.",
 
 		"kVM_VoteForResetTitle": "Do you want to reset the VM?",
-		"kVM_VoteForResetTimer": "Vote ends in {0} seconds",
+		"kVM_VoteForResetTimer": "Vote to restore ends in {0} seconds",
+		"kVM_VoteForRebootTitle": "Do you want to reboot the VM?",
+		"kVM_VoteForRebootTimer": "Vote to reboot ends in {0} seconds",
 
 		"kVMButtons_TakeTurn": "Take Turn",
 		"kVMButtons_EndTurn": "End Turn",
 		"kVMButtons_ChangeUsername": "Change Username",
 		"kVMButtons_Keyboard": "Keyboard",
 		"KVMButtons_CtrlAltDel": "Ctrl+Alt+Del",
-		"KVMButtons_AudioMuteLabel_On": 'Sound Disabled',
-		"KVMButtons_AudioMuteLabel_Off": 'Sound Enabled',
+		"KVMButtons_AudioMute_On": 'Sound disabled',
+		"KVMButtons_AudioMute_Off": 'Sound enabled',
 
 		"kVMButtons_VoteForReset": "Vote For Reset",
 		"kVMButtons_Screenshot": "Screenshot",

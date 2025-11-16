@@ -99,7 +99,7 @@ export default class AuthManager {
     }
 
     logout() {
-        return new Promise<LogoutResult>(async res => {
+        return new Promise<DefaultResult>(async res => {
             if (!this.account) throw new Error("Cannot log out without logging in first");
             var data = await fetch(this.apiEndpoint + "/api/v1/logout", {
                 method: "POST",
@@ -110,7 +110,7 @@ export default class AuthManager {
                     token: this.account.sessionToken
                 })
             });
-            var json = await data.json() as LogoutResult;
+            var json = await data.json() as DefaultResult;
             this.account = null;
             res(json);
         })
@@ -163,7 +163,7 @@ export default class AuthManager {
     }
 
     sendPasswordResetEmail(username : string, email : string, captchaToken : string | undefined, turnstileToken : string | undefined, recaptchaToken : string | undefined) {
-        return new Promise<PasswordResetResult>(async res => {
+        return new Promise<DefaultResult>(async res => {
             if (!this.info) throw new Error("Cannot send password reset email without fetching API information.");
             if (!captchaToken && this.info.hcaptcha?.required) throw new Error("This API requires a valid hCaptcha token.");
             if (!turnstileToken && this.info.turnstile?.required) throw new Error("This API requires a valid Turnstile token.");
@@ -181,12 +181,12 @@ export default class AuthManager {
                     recaptchaToken: recaptchaToken
                 })
             });
-            res(await data.json() as PasswordResetResult);
+            res(await data.json() as DefaultResult);
         });
     }
 
     resetPassword(username : string, email : string, code : string, newPassword : string) {
-        return new Promise<PasswordResetResult>(async res => {
+        return new Promise<DefaultResult>(async res => {
             var data = await fetch(this.apiEndpoint + "/api/v1/reset", {
                 method: "POST",
                 headers: {
@@ -199,7 +199,7 @@ export default class AuthManager {
                     newPassword: newPassword
                 })
             });
-            res(await data.json() as PasswordResetResult);
+            res(await data.json() as DefaultResult);
         });
     }
 }
@@ -252,11 +252,6 @@ export interface VerifyEmailResult {
     sessionToken : string | undefined;
 }
 
-export interface LogoutResult {
-    success : boolean;
-    error : string | undefined;
-}
-
 export interface Account {
     username : string;
     email : string;
@@ -270,7 +265,7 @@ export interface UpdateAccountResult {
     sessionExpired : boolean | undefined;
 }
 
-export interface PasswordResetResult {
+export interface DefaultResult {
     success : boolean;
     error : string | undefined;
 }

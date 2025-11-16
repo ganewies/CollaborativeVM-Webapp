@@ -49,8 +49,8 @@ export enum I18nStringKey {
 	kVMButtons_ChangeUsername = 'kVMButtons_ChangeUsername',
 	kVMButtons_Keyboard = 'kVMButtons_Keyboard',
 	KVMButtons_CtrlAltDel = 'KVMButtons_CtrlAltDel',
-	KVMButtons_AudioMuteLabel_On = 'KVMButtons_AudioMuteLabel_On',
-	KVMButtons_AudioMuteLabel_Off = 'KVMButtons_AudioMuteLabel_Off',
+	kVMButtons_AudioMute_On = 'kVMButtons_AudioMute_On',
+	kVMButtons_AudioMute_Off = 'kVMButtons_AudioMute_Off',
 
 	kVMButtons_VoteForReset = 'kVMButtons_VoteForReset',
 	kVMButtons_Screenshot = 'kVMButtons_Screenshot',
@@ -167,10 +167,8 @@ export class I18n {
 	private languageDropdown: HTMLSpanElement = document.getElementById('languageDropdown') as HTMLSpanElement;
 	private emitter: Emitter<I18nEvents> = createNanoEvents();
 
-	CurrentLanguage = () => this.langId;
-
 	// the ID of the language
-	private langId: string = fallbackId;
+	langId: string = fallbackId;
 
 	private regionNameRenderer = new Intl.DisplayNames(['en-US'], {type: 'region'});
 	
@@ -191,7 +189,7 @@ export class I18n {
 			// Add to language dropdown
 			var a = document.createElement('a');
 			a.classList.add('dropdown-item');
-			a.href = '#';
+			a.href = 'javascript:void()';
 			a.innerText = `${_lang.flag} ${_lang.languageName}`;
 			a.addEventListener('click', async e => {
 				e.preventDefault();
@@ -286,7 +284,7 @@ export class I18n {
 			voteYesBtnText: I18nStringKey.kGeneric_Yes,
 			voteNoBtnText: I18nStringKey.kGeneric_No,
 
-			audioBtnText: I18nStringKey.KVMButtons_AudioMuteLabel_On,
+			audioBtnText: I18nStringKey.kVMButtons_AudioMute_Off,
 			oskBtnText: I18nStringKey.kVMButtons_Keyboard,
 			ctrlAltDelBtnText: I18nStringKey.KVMButtons_CtrlAltDel,
 			voteForResetBtnText: I18nStringKey.kVMButtons_VoteForReset,

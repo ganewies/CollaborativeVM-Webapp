@@ -55,6 +55,7 @@ interface CollabVMClientPrivateEvents {
 	connect: (connectedToVM: boolean) => void;
 	ip: (username: string, ip: string) => void;
 	qemu: (qemuResponse: string) => void;
+	isanyos: (bool: boolean) => void;
 }
 
 const DefaultCapabilities = [ "bin" ];
@@ -80,7 +81,7 @@ export default class CollabVMClient {
 	private node: string | null = null;
 	private auth: boolean = false;
 	// audio
-	private audioMute: boolean = true; // decides whether audio will play or not
+	audioMute: boolean = true; // decides whether audio will play or not
 	private opusPlayer: OpusPlayer | undefined;
 	// events that are used internally and not exposed
 	private internalEmitter: Emitter<CollabVMClientPrivateEvents>;
@@ -543,11 +544,13 @@ export default class CollabVMClient {
 				for (let i = 0; i < list.length; i += 3) {
 					let th = new Image();
 					th.src = 'data:image/jpeg;base64,' + list[i + 2];
+					//@ts-ignore
 					vms.push({
 						url: this.url,
 						id: list[i],
 						displayName: list[i + 1],
-						thumbnail: th
+						thumbnail: th,
+						refreshRate: 3000
 					});
 				}
 				res(vms);
@@ -560,7 +563,7 @@ export default class CollabVMClient {
 	checkIfAnyOS(): Promise<boolean> {
 		return new Promise<boolean>(async (res) => {
 			this.send('isAnyOS');
-			this.on('isanyos', (bool) => {
+			this.onInternal('isanyos', (bool) => {
 				return bool;
 			});
 		});
@@ -624,7 +627,7 @@ export default class CollabVMClient {
 		this.send('audioMute');
 		this.audioMute = !this.audioMute;
 	}
-	// Return mute status
+	// Return mute status (soon replaced by CollabVMClient.audioMute)
 	getAudioMute() {
 		return this.audioMute;
 	}
